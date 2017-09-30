@@ -1,4 +1,4 @@
-package genrect;
+package main.jRtree.genrect;
 
 public class RealGen extends AbstractGen {
 

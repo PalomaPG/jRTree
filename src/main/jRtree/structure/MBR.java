@@ -1,4 +1,4 @@
-package structure;
+package main.jRtree.structure;
 
 /**
  * structure.MBR implementation. Assumes 2D rectangles, doesn't make any check.
@@ -115,5 +115,5 @@ public class MBR {
         return max_y()-min_y();
     }
 
-    public double area(){ return height()*width()}
+    public double area(){ return height()*width();}
 }

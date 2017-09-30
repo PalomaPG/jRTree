@@ -1,4 +1,6 @@
-package structure;
+package test.jRTree.structure;
+
+import main.jRtree.structure.*;
 
 import org.junit.*;
 import org.junit.rules.ExpectedException;
