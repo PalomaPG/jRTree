@@ -1,0 +1,4 @@
+Doing:
+
+Implementando búsqueda en nodos. Se debe implementar Null Pattern para hacer más simple la búsqueda.
+Quizás eliminar test de borrado de elementos.
