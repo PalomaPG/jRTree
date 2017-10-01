@@ -35,7 +35,7 @@ public class RTree {
         double min_mbr = Double.MAX_VALUE;
 
         for (NodeEntry entry : nodeData){  // O(node.curSize)
-            double area = entry.calculateEnlargement(ne);
+            double area = entry.calcEnlargement(ne);
             if (lastArea > area){
                 lastArea = area;
                 minEnlargement = entry;

@@ -1,5 +1,6 @@
 package structure;
 
+import org.junit.Before;
 import org.junit.Test;
 import structure.Coord2D;
 import structure.MBR;
@@ -55,7 +56,7 @@ public class MBRTest {
         assertEquals(mbr_1, mbr_2);
         assertEquals(4, mbr_1.area());
         assertEquals(4, mbr_2.area());
-        MBR mbr_test = new MBR(new Coord2D(3,20), (5, 56));
+        MBR mbr_test = new MBR(new Coord2D(3,20), new Coord2D(5, 56));
         assertFalse(mbr_test.equals(mbr_1));
         assertFalse(mbr_test.equals(mbr_2));
         MBR mbr_test2 = new MBR(new Coord2D(0,-1), new Coord2D(4,0));

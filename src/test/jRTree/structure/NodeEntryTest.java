@@ -14,7 +14,7 @@ public class NodeEntryTest{
     NodeEntry ne2;
 
     /*Seteo de variables*/
-    @before
+    @Before
     public void setUp(){
 
         /*Coordenadas mbr1 - el area no aumente: (1,1);(2,2)*/
@@ -35,14 +35,15 @@ public class NodeEntryTest{
     @Test
     public void zeroEnlargement(){
 
-        assertEquals(0, container.calcEnlargement(ne1));
-        assertFalse(0.0==container.calcEnlargement(ne2));
+        Assert.assertEquals(0, container.calcEnlargement(ne1),0.00001);
+        Assert.assertFalse(0.0==container.calcEnlargement(ne2));
 
     }
 
-    @Test void nonZeroEnlargement(){
-        assertEquals(30, container.calcEnlargement(ne2));
-        asserFalse(30>container.calcEnlargement(ne2));
-        asserFalse(30<container.calcEnlargement(ne2));
+    @Test
+    public void nonZeroEnlargement(){
+        Assert.assertEquals(30, container.calcEnlargement(ne2),0.00001);
+        Assert.assertFalse(30>container.calcEnlargement(ne2));
+        Assert.assertFalse(30<container.calcEnlargement(ne2));
     }
 }
