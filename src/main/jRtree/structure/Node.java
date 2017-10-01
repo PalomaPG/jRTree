@@ -10,11 +10,16 @@ import java.util.ArrayList;
 public class Node extends AbstractNode {
 
 
+
     public Node(int capacity){
+        super();
         this.capacity = capacity;
-        this.curSize = 0;
-        this.data = new ArrayList<NodeEntry>(capacity);
-        this.isLeaf = true; // By default to make tests pass
+    }
+
+    public Node(int capacity, NodeEntry parent){
+        super();
+        this.capacity = capacity;
+        this.parent = parent;
     }
 
 
@@ -80,5 +85,10 @@ public class Node extends AbstractNode {
     public ArrayList<NodeEntry> getData() {
         return data;
     }
+
+    public NodeEntry getParent(){
+        return parent;
+    }
+
 
 }

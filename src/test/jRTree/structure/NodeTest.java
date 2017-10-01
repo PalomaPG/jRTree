@@ -1,5 +1,6 @@
 package structure;
 
+import org.junit.Assert;
 import org.junit.Test;
 import structure.INode;
 import structure.MBR;
@@ -29,6 +30,15 @@ public class NodeTest {
         // assert
         assertEquals(capacity, n.getCapacity());
         assertEquals(0, n.getCurSize());
+
+        Node n1 = new Node(capacity, new NodeEntry(new MBR(new Coord2D(0,1), new Coord2D(3,6)),
+                new Node(capacity), new Node(capacity)));
+
+        NodeEntry p = new NodeEntry(new MBR(new Coord2D(0,1), new Coord2D(3,6)),
+                new Node(capacity), new Node(capacity));
+
+        Assert.assertEquals(n1.getParent().getMBR().area(), new Node(capacity, p).getParent().getMBR().area(), 0.000001);
+
     }
 
 
