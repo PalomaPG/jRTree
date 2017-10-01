@@ -18,4 +18,5 @@ public interface INode {
     void setIsLeaf(boolean b);
 
     ArrayList<NodeEntry> getData();
+
 }

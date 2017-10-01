@@ -30,9 +30,11 @@ public class RTreeTest {
         this.thrown = null;
     }
 
+
     /**
      * Insertion tests
      */
+    /*
     @Test
     public void insertNotContainingMBRs(){
         // arrange
@@ -60,11 +62,12 @@ public class RTreeTest {
         // assert
         // No assert section because execution should not pass last insert.
     }
-
+    */
     /**
      * This test tries to check if a split operation happened.
      * After a split (wherever used) the number of nodes increases.
      */
+    /*
     @Test
     public void overflowHandle(){
         // arrange
@@ -79,5 +82,5 @@ public class RTreeTest {
         rt.insert(mbr4);
         // assert
         //assertTrue(rt.size()>1);
-    }
+    }*/
 }

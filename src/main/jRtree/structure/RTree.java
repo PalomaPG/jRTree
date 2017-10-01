@@ -69,23 +69,21 @@ public class RTree {
         }
 
     }
-
+    /*
     public void insert(MBR mbr) throws Exception{
-        fakeInsert(new NodeEntry(mbr, new NullNode()), this.root);
-    }
 
-    public ArrayList<NodeEntry> fakeInsert(NodeEntry ne, INode node) throws Exception{
+        fakeInsert(new NodeEntry(mbr, new NullNode()), this.root);
+    }*/
+
+    public void insert(NodeEntry ne, INode node, ArrayList<NodeEntry>track) throws Exception{
+
         if (node.isLeaf()){
-            boolean inserted = node.insert(ne);  // O(1)
-            if (!inserted){
-                //ArrayList<NodeEntry> newEntries = nodeSplitter.split(ne, node);  // Size 2
-                return nodeSplitter.split(ne, node);
-            }
-            return null;
+            node.insert(ne);  // O(1)
         }
 
         ArrayList<NodeEntry> nodeData = node.getData();
         NodeEntry minEnlargement;
+
         double minArea = Double.MAX_VALUE;
         ArrayList<NodeEntry> candidates = new ArrayList<NodeEntry>();
         double area;
@@ -98,23 +96,10 @@ public class RTree {
             else if(minArea==area){
                 candidates.add(entry);
             }
-            /*
-            if (lastArea > area){
-                lastArea = area;
-                minEnlargement = entry;
-            }*/
-            // Agregar caso si hay mas de uno que puede albergar la nueva entrada
         }
         minEnlargement = getMinEnlargement(candidates);
-        ArrayList<NodeEntry> newEntries = fakeInsert(ne, minEnlargement.getChild());
-        if (newEntries!=null){
-            // Si entra aquí debe actualizarse este nodo con las nuevas entradas que vienen de abajo
-
-
-
-        }
-
-        return null;  // Para q no tire warning el IDE
+        track.add(minEnlargement);
+        insert(ne, minEnlargement.getChild(), track);
     }
 
     public Node getRoot() {
