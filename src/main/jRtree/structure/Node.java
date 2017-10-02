@@ -89,6 +89,9 @@ public class Node extends AbstractNode {
     public NodeEntry getParent(){
         return parent;
     }
+    public void setParent(NodeEntry ne){
+        parent =ne;
+    }
 
 
 }

@@ -69,17 +69,21 @@ public class RTree {
         }
 
     }
-    /*
-    public void insert(MBR mbr) throws Exception{
 
-        fakeInsert(new NodeEntry(mbr, new NullNode()), this.root);
-    }*/
+    public ArrayList<NodeEntry> insert(MBR mbr) throws Exception{
 
-    public void insert(NodeEntry ne, INode node, ArrayList<NodeEntry>track) throws Exception{
+        ArrayList<NodeEntry> track = new ArrayList<NodeEntry>();
+        fakeInsert(new NodeEntry(mbr, new NullNode()), this.root, track);
+        return track;
+    }
+
+    public void fakeInsert(NodeEntry ne, INode node, ArrayList<NodeEntry>track) throws RTreeInsertException{
 
         if (node.isLeaf()){
             node.insert(ne);  // O(1)
+            return;
         }
+
 
         ArrayList<NodeEntry> nodeData = node.getData();
         NodeEntry minEnlargement;
@@ -90,6 +94,7 @@ public class RTree {
         for (NodeEntry entry : nodeData){  // O(node.curSize)
             area = entry.calcEnlargement(ne);
             if(minArea > area){
+                minArea =area;
                 candidates.clear();
                 candidates.add(entry);
             }
@@ -97,9 +102,19 @@ public class RTree {
                 candidates.add(entry);
             }
         }
-        minEnlargement = getMinEnlargement(candidates);
-        track.add(minEnlargement);
-        insert(ne, minEnlargement.getChild(), track);
+        try {
+            minEnlargement = getMinEnlargement(candidates);
+            track.add(minEnlargement);
+            fakeInsert(ne, minEnlargement.getChild(), track);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
+    }
+
+    public void insert(){
+
     }
 
     public Node getRoot() {

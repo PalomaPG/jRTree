@@ -19,4 +19,6 @@ public interface INode {
 
     ArrayList<NodeEntry> getData();
 
+    void setParent(NodeEntry ne);
+
 }

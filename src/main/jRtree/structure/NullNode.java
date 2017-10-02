@@ -35,4 +35,8 @@ public class NullNode extends AbstractNode {
     public ArrayList<NodeEntry> getData() {
         return null;
     }
+
+    @Override
+    public void setParent(NodeEntry ne) {
+    }
 }

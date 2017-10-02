@@ -17,4 +17,5 @@ public abstract class AbstractNode implements INode {
         this.isLeaf = true; // By default to make tests pass
         parent = null;
     }
+
 }
