@@ -1,4 +1,4 @@
-package main.jRtree.structure;
+package structure;
 
 public class NodeEntry{
 
@@ -24,7 +24,7 @@ public class NodeEntry{
 
     public double calculateEnlargement(NodeEntry ne){
 
-        //Coordenandas del MBR de este NodeEntry
+        // Coordenadas del MBR de este NodeEntry
 
         MBR ne_mbr = ne.getMBR();
 
@@ -54,5 +54,9 @@ public class NodeEntry{
                     (Math.max(max_y, ne_max_y) - Math.min(min_y, ne_min_y))-(ne_mbr.height()*ne_mbr.width());
 
 
+    }
+
+    public void setMbr(MBR mbr){
+        this.mbr = mbr;
     }
 }

@@ -1,8 +1,7 @@
-package test.jRTree.structure;
+package structure;
 
-import main.jRtree.structure.*;
+import org.junit.Ignore;
 import org.junit.Test;
-
 
 import java.util.ArrayList;
 
@@ -69,6 +68,7 @@ public class NodeTest {
     /**
      * Test deleting elements from a structure.Node.
      */
+    @Ignore
     @Test
     public void nodeDeleteTest(){
         // arrange

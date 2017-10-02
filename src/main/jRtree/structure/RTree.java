@@ -1,10 +1,11 @@
-package main.jRtree.structure;
+package structure;
 
 import java.util.ArrayList;
 
 public class RTree {
 
     int nodeSize;
+    int treeSize;
     NodeSplitter nodeSplitter;
     Node root;
 
@@ -13,13 +14,14 @@ public class RTree {
         this.nodeSize = nodeSize;
         this.nodeSplitter = nodeSplitter;
         this.root = new Node(nodeSize);
+        this.treeSize = 1;
     }
 
     public void insert(MBR mbr){
-        fakeInsert(new NodeEntry(mbr, new NullNode()), this.root);
+        realInsert(new NodeEntry(mbr, new NullNode()), this.root);
     }
 
-    public ArrayList<NodeEntry> fakeInsert(NodeEntry ne, INode node){
+    private ArrayList<NodeEntry> realInsert(NodeEntry ne, INode node){
         if (node.isLeaf()){
             boolean inserted = node.insert(ne);  // O(1)
             if (!inserted){
@@ -42,7 +44,7 @@ public class RTree {
             }
             // Agregar caso si hay mas de uno que puede albergar la nueva entrada
         }
-        ArrayList<NodeEntry> newEntries = fakeInsert(ne, minEnlargement.getChild());
+        ArrayList<NodeEntry> newEntries = realInsert(ne, minEnlargement.getChild());
         if (!(newEntries.equals(null))){
             // Si entra aquí debe actualizarse este nodo con las nuevas entradas que vienen de abajo
         }
@@ -53,6 +55,13 @@ public class RTree {
     public Node getRoot() {
         return root;
     }
+
+    public int size(){ return this.treeSize;}
+
     public void search(){}
+
+}
+
+class InsertionError extends Exception {
 
 }

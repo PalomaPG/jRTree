@@ -1,12 +1,8 @@
-package test.jRTree.structure;
+package structure;
 
 import org.junit.*;
-import org.junit.rules.ExpectedException;
 
-import main.jRtree.structure.*;
-
-
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 public class NodeEntryTest{
 
@@ -14,17 +10,16 @@ public class NodeEntryTest{
     NodeEntry ne1;
     NodeEntry ne2;
 
-    /*Seteo de variables*/
-    @before
+    /* Seteo de variables */
+    @Before
     public void setUp(){
-
-        /*Coordenadas mbr1 - el area no aumente: (1,1);(2,2)*/
+        /* Coordenadas mbr1 - el area no aumente: (1,1);(2,2) */
         MBR mbr1 = new MBR(new Coord2D(1, 1), new Coord2D(2,2));
 
-        /*Coordenadas mbr2 - area aumenta horizontalmente: (13.5, 10) ; (17.5, 12.5)*/
+        /* Coordenadas mbr2 - area aumenta horizontalmente: (13.5, 10) ; (17.5, 12.5)*/
         MBR mbr2 = new MBR(new Coord2D(13, 10), new Coord2D(17,12));
 
-        /*INode MBR: (0.0, 0.0), (15,15)*/
+        /* INode MBR: (0.0, 0.0), (15,15)*/
         MBR cont_mbr = new MBR(new Coord2D(0, 0), new Coord2D(15,15));
 
         container = new NodeEntry(cont_mbr, new NullNode());
@@ -32,18 +27,18 @@ public class NodeEntryTest{
         ne2 = new NodeEntry(mbr2,  new NullNode());
     }
 
-
+    @Ignore
     @Test
     public void zeroEnlargement(){
-
-        assertEquals(0, container.calcEnlargement(ne1));
-        assertFalse(0.0==container.calcEnlargement(ne2));
-
+        assertEquals(0, container.calculateEnlargement(ne1), 0.00001);
+        assertFalse(0.0==container.calculateEnlargement(ne2));
     }
 
-    @Test void nonZeroEnlargement(){
-        assertEquals(30, container.calcEnlargement(ne2));
-        asserFalse(30>container.calcEnlargement(ne2));
-        asserFalse(30<container.calcEnlargement(ne2));
+    @Ignore
+    @Test
+    public void nonZeroEnlargement(){
+        assertEquals(30, container.calculateEnlargement(ne2), 0.00001);
+        assertFalse(30>container.calculateEnlargement(ne2));
+        assertFalse(30<container.calculateEnlargement(ne2));
     }
 }

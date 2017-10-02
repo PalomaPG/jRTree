@@ -1,6 +1,6 @@
-package main.jRtree.structure;// Simple class to represent two-dimensional coordinates of real numbers
+package structure;// Simple class to represent two-dimensional coordinates of real numbers
 
-public class Coord2D {
+public class Coord2D{
 
     private Double x;
     private Double y;
@@ -32,6 +32,26 @@ public class Coord2D {
         else {
             return false;
         }
+    }
+
+    public boolean isAtNorth(Coord2D c){
+        return this.y > c.getY();
+    }
+
+    public boolean isAtWest(Coord2D c){
+        return this.x < c.getX();
+    }
+
+    public boolean isAtSouth(Coord2D c){
+        return this.y < c.getY();
+    }
+
+    public boolean isAtEast(Coord2D c){
+        return this.x > c.getX();
+    }
+
+    public double distanceTo(Coord2D c){
+        return Math.sqrt(Math.pow(this.x - c.getX(), 2) + Math.pow(this.y - c.getY(), 2));
     }
 
 }
