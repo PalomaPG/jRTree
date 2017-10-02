@@ -73,17 +73,16 @@ public class RTreeTest {
         leaf2.insert(NE7);
 
 
-        ArrayList<NodeEntry> t1 = rt.insert(mbr1);
+        Node leaf = rt.insert(mbr1);
+        Assert.assertNotNull(leaf);
+        Assert.assertEquals(leaf, rt.getRoot());
         rt2.setRoot((Node)in);
-        ArrayList<NodeEntry> track1 = rt2.insert(R8);
-        ArrayList<NodeEntry> track2 = rt2.insert(R9);
+        Node leaf4 = rt2.insert(R8);
+        Node leaf5 = rt2.insert(R9);
 
-        Assert.assertNotNull(track1);
-        Assert.assertNotEquals(track1, new ArrayList<NodeEntry>());
-        Assert.assertNotEquals(track1, track2);
-        Assert.assertEquals(track1.get(0).getMBR(), R1);
-        Assert.assertEquals(track2.get(0).getMBR(), R2);
-
+        Assert.assertEquals(leaf4, leaf1);
+        Assert.assertEquals(leaf5, leaf2);
+        rt2.adjust(leaf5,R9);
     }
 
     /*

@@ -75,6 +75,23 @@ public class MBR {
         return pt4;
     }
 
+
+    public void setPt2X(double x){
+        pt2.setX(x);
+    }
+
+    public void setPt2Y(double y){
+        pt2.setY(y);
+    }
+
+    public void setPt4X(double x){
+        pt4.setX(x);
+    }
+
+    public void setPt4Y(double y){
+        pt4.setY(y);
+    }
+
     @Override
     public boolean equals(Object aMBR){
         if (aMBR instanceof MBR){

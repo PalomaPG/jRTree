@@ -34,4 +34,11 @@ public class Coord2D {
         }
     }
 
+    public void setX(double x) {
+        this.x = x;
+    }
+
+    public void setY(double x) {
+        this.y = x;
+    }
 }

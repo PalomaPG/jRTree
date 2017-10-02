@@ -69,6 +69,22 @@ public class NodeEntry{
     }
 
     public MBR modifyMBR(MBR mbr){
-        return null;
+
+        if(mbr.getPt2().getX()<this.mbr.getPt2().getX()){
+            this.mbr.setPt2X(mbr.getPt2().getX());
+        }
+
+        if(mbr.getPt4().getX()>this.mbr.getPt4().getX()){
+            this.mbr.setPt4X(mbr.getPt2().getX());
+        }
+
+        if(mbr.getPt2().getY()<this.mbr.getPt2().getY()){
+            this.mbr.setPt2Y(mbr.getPt2().getY());
+        }
+
+        if(mbr.getPt4().getY()>this.mbr.getPt4().getY()){
+            this.mbr.setPt4Y(mbr.getPt2().getY());
+        }
+        return this.mbr;
     }
 }
