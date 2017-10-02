@@ -18,4 +18,7 @@ public abstract class AbstractNode implements INode {
         parent = null;
     }
 
+    public boolean overflow() {
+        return overflow;
+    }
 }

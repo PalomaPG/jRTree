@@ -26,8 +26,6 @@ public class RTreeTest {
         this.thrown = ExpectedException.none();
     }
 
-
-
     /**
      * Insertion tests
      */

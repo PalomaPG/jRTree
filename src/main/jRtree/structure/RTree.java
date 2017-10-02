@@ -113,9 +113,29 @@ public class RTree {
 
     }
 
-    public void insert(){
+
+    private  void adjust(Node node, MBR mbr){
+
+        /*No hay overflow*/
+        if(!node.overflow()){
+            if(node==root) return;
+
+            else{
+
+                NodeEntry parent = node.getParent();
+                adjust((Node)parent.getHost(), parent.modifyMBR(mbr));
+
+            }
+
+        }
+
+        /*Hay overflow*/
+        else{
+
+        }
 
     }
+
 
     public Node getRoot() {
         return root;

@@ -67,4 +67,8 @@ public class NodeEntry{
 
 
     }
+
+    public MBR modifyMBR(MBR mbr){
+        return null;
+    }
 }
