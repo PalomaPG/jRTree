@@ -23,37 +23,20 @@ public class NodeEntry{
     }
 
     public double calculateEnlargement(NodeEntry ne){
-
+        MBR neMBR = ne.getMBR();
         // Coordenadas del MBR de este NodeEntry
+        double minX = mbr.getPt2().getX();
+        double minY = mbr.getPt2().getY();
+        double maxX = mbr.getPt4().getX();
+        double maxY = mbr.getPt4().getY();
 
-        MBR ne_mbr = ne.getMBR();
+        double neMinX = neMBR.getPt2().getX();
+        double neMinY = neMBR.getPt2().getY();
+        double neMaxX = neMBR.getPt4().getX();
+        double neMaxY = neMBR.getPt4().getY();
 
-        double min_x = mbr.min_x();
-        double min_y = mbr.min_y();
-        double max_x = mbr.max_x();
-        double max_y = mbr.max_y();
-
-
-        double ne_min_x = ne_mbr.min_x();
-        double ne_min_y = ne_mbr.min_y();
-        double ne_max_x = ne_mbr.max_x();
-        double ne_max_y = ne_mbr.max_y();
-        /*
-        Caso en que el MBR no crezca nada: esta entrada cabe completamente
-        en el.
-         */
-        if(min_y>=ne_min_y && max_y<= ne_max_y && min_x >=ne_min_x && max_x<=ne_max_x) {
-            System.err.println("within MBR");
-            return 0.0;
-        }
-        /*Caso en el que este MBR posea alguna coordenada mayor o menor a las
-        * que definen el rango del MBR contenedor */
-        else
-
-            return (Math.max(max_x, ne_max_x) - Math.min(min_x, ne_min_x))*
-                    (Math.max(max_y, ne_max_y) - Math.min(min_y, ne_min_y))-(ne_mbr.height()*ne_mbr.width());
-
-
+        return (Math.max(maxX, neMaxX) - Math.min(minX, neMinX))*
+                (Math.max(maxY, neMaxY) - Math.min(minY, neMinY))-mbr.area();
     }
 
     public void setMbr(MBR mbr){

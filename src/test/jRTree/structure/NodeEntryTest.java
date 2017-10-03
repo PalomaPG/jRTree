@@ -20,21 +20,23 @@ public class NodeEntryTest{
         MBR mbr2 = new MBR(new Coord2D(13, 10), new Coord2D(17,12));
 
         /* INode MBR: (0.0, 0.0), (15,15)*/
-        MBR cont_mbr = new MBR(new Coord2D(0, 0), new Coord2D(15,15));
+        MBR contMBR = new MBR(new Coord2D(0, 0), new Coord2D(15,15));
 
-        container = new NodeEntry(cont_mbr, new NullNode());
+        container = new NodeEntry(contMBR, new NullNode());
         ne1 = new NodeEntry(mbr1,  new NullNode());
         ne2 = new NodeEntry(mbr2,  new NullNode());
     }
 
-    @Ignore
     @Test
     public void zeroEnlargement(){
-        assertEquals(0, container.calculateEnlargement(ne1), 0.00001);
-        assertFalse(0.0==container.calculateEnlargement(ne2));
+        // act
+        double enlargement1 = container.calculateEnlargement(ne1);
+        double enlargement2 = container.calculateEnlargement(ne2);
+        // assert
+        assertEquals(0, enlargement1, 0.00001);
+        assertNotEquals(0, enlargement2, 0.00001);
     }
 
-    @Ignore
     @Test
     public void nonZeroEnlargement(){
         assertEquals(30, container.calculateEnlargement(ne2), 0.00001);

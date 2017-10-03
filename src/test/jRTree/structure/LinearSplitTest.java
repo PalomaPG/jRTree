@@ -49,8 +49,8 @@ public class LinearSplitTest {
         INode expectedNode1 = new Node(3);
         INode expectedNode2 = new Node(3);
         expectedNode1.insert(ne1);
-        expectedNode1.insert(ne2);
-        expectedNode2.insert(ne3);
+        expectedNode1.insert(ne3);
+        expectedNode2.insert(ne2);
         expectedNode2.insert(ne4);
         // act
         ArrayList<NodeEntry> splittedNodes = ls.split(ne4, node);
