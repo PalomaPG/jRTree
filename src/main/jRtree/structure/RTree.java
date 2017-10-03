@@ -48,8 +48,7 @@ public class RTree {
 
                 }
 
-                if(indexes.isEmpty()) throw new RTreeInsertException("No se encontro minimo MBR");
-                else if(indexes.size()==1){
+                if(indexes.size()==1){
                     return ne_list.get(indexes.get(0));
                 }
 
@@ -57,9 +56,9 @@ public class RTree {
 
                     /*si mas de un MBR tienen igual area que es minima,
                     se elige uno al azar*/
-
-                    int rnd = ThreadLocalRandom.current().nextInt(0, indexes.size()+1);
-                    return ne_list.get(indexes.get(rnd));
+                    /*Cambiar random*/
+                    //int rnd = ThreadLocalRandom.current().nextInt(0, indexes.size()+1);
+                    return ne_list.get(indexes.get(0));
 
                 }
 
@@ -70,6 +69,7 @@ public class RTree {
 
     }
 
+    /*Devuelve hoja donde se inserto*/
     public Node insert(MBR mbr) throws Exception{
 
         Node leaf =fakeInsert(new NodeEntry(mbr, new NullNode()), this.root);
@@ -141,6 +141,8 @@ public class RTree {
     public void setRoot(Node root) {
         this.root=root;
     }
-    public void search(){}
+    public ArrayList<MBR> search(Node node, ArrayList<MBR> mbr_lst){
+        return null;
+    }
 
 }
