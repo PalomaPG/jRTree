@@ -2,13 +2,15 @@ package structure;
 
 import org.junit.*;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 
 public class NodeEntryTest{
 
     NodeEntry container;
     NodeEntry ne1;
     NodeEntry ne2;
+    final double delta = 0.00001;
 
     /* Seteo de variables */
     @Before
@@ -27,20 +29,25 @@ public class NodeEntryTest{
         ne2 = new NodeEntry(mbr2,  new NullNode());
     }
 
+    /**
+     * Enlargement tests
+     */
+
     @Test
     public void zeroEnlargement(){
         // act
         double enlargement1 = container.calculateEnlargement(ne1);
         double enlargement2 = container.calculateEnlargement(ne2);
         // assert
-        assertEquals(0, enlargement1, 0.00001);
-        assertNotEquals(0, enlargement2, 0.00001);
+        assertEquals(0, enlargement1, delta);
+        assertNotEquals(0, enlargement2, delta);
     }
 
     @Test
     public void nonZeroEnlargement(){
-        assertEquals(30, container.calculateEnlargement(ne2), 0.00001);
-        assertFalse(30>container.calculateEnlargement(ne2));
-        assertFalse(30<container.calculateEnlargement(ne2));
+        // act
+        double enlargement = container.calculateEnlargement(ne2);
+        // assert
+        assertEquals(30, enlargement, delta);
     }
 }

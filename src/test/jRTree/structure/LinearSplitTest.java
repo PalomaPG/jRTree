@@ -19,8 +19,8 @@ public class LinearSplitTest {
         this.ls = new LinearSplitter();
         ne1 = new NodeEntry(new MBR(new Coord2D(0,0), new Coord2D(1,1)), new NullNode());
         ne2 = new NodeEntry(new MBR(new Coord2D(9,9), new Coord2D(10,10)), new NullNode());
-        ne3 = new NodeEntry(new MBR(new Coord2D(4,4), new Coord2D(5,5)), new NullNode());
-        ne4 = new NodeEntry(new MBR(new Coord2D(5,5), new Coord2D(6,6)), new NullNode());
+        ne3 = new NodeEntry(new MBR(new Coord2D(1,1), new Coord2D(1.5,1.5)), new NullNode());
+        ne4 = new NodeEntry(new MBR(new Coord2D(8,9), new Coord2D(9,10)), new NullNode());
     }
 
     @Test

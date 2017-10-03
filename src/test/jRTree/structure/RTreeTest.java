@@ -27,13 +27,6 @@ public class RTreeTest {
         this.thrown = ExpectedException.none();
     }
 
-    @After
-    public void tearDown(){
-        this.nodeSplitter = null;
-        this.rt = null;
-        this.thrown = null;
-    }
-
     /**
      * Insertion tests
      */

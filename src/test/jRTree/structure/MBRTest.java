@@ -8,7 +8,7 @@ import static org.junit.Assert.assertTrue;
 
 public class MBRTest {
 
-    MBR mbr_1, mbr_2, mbr_3;
+    MBR mbr1, mbr2, mbr3;
     final double delta = 0.00001;
 
     @Before
@@ -18,9 +18,9 @@ public class MBRTest {
         double [] pt2 = {-1,-1};
         double [] pt3 = {1,-1};
         double [] pt4 = {1,1};
-        mbr_1 = new MBR(mbr_square);  // structure.MBR using and array of points
-        mbr_2 = new MBR(pt1, pt2, pt3, pt4);  // structure.MBR(pt1, pt2, pt3, pt4) counterclockwise
-        mbr_3 = new MBR(new Coord2D(3,6), new Coord2D(5,20));
+        mbr1 = new MBR(mbr_square);  // structure.MBR using and array of points
+        mbr2 = new MBR(pt1, pt2, pt3, pt4);  // structure.MBR(pt1, pt2, pt3, pt4) counterclockwise
+        mbr3 = new MBR(new Coord2D(3,6), new Coord2D(5,20));
 
     }
 
@@ -50,13 +50,13 @@ public class MBRTest {
 
     @Test
     public void MBREquality(){
-        assertEquals(mbr_1, mbr_2);
+        assertEquals(mbr1, mbr2);
     }
 
     @Test
     public void areaTest(){
-        assertEquals(4, mbr_1.area(), delta);
-        assertEquals(28, mbr_3.area(), delta);
+        assertEquals(4, mbr1.area(), delta);
+        assertEquals(28, mbr3.area(), delta);
     }
 
     /**
@@ -68,7 +68,7 @@ public class MBRTest {
         // arrange
         MBR contained = new MBR(new Coord2D(0.0,-1.0), new Coord2D(0.5,0.5));
         // act and assert
-        actAndAssertFotContainmentTests(contained, mbr_1);
+        actAndAssertFotContainmentTests(contained, mbr1);
     }
 
     @Test
@@ -76,7 +76,7 @@ public class MBRTest {
         // arrange
         MBR contained = new MBR(new Coord2D(-1.0,0.0), new Coord2D(0.5,0.5));
         // act and assert
-        actAndAssertFotContainmentTests(contained, mbr_1);
+        actAndAssertFotContainmentTests(contained, mbr1);
     }
 
     @Test
@@ -84,7 +84,7 @@ public class MBRTest {
         // arrange
         MBR contained = new MBR(new Coord2D(0.0,0.0), new Coord2D(0.5,1));
         // act and assert
-        actAndAssertFotContainmentTests(contained, mbr_1);
+        actAndAssertFotContainmentTests(contained, mbr1);
     }
 
     @Test
@@ -92,7 +92,7 @@ public class MBRTest {
         // arrange
         MBR contained = new MBR(new Coord2D(0.0,0.0), new Coord2D(1,0.5));
         // act and assert
-        actAndAssertFotContainmentTests(contained, mbr_1);
+        actAndAssertFotContainmentTests(contained, mbr1);
     }
 
     @Test
@@ -100,7 +100,7 @@ public class MBRTest {
         // arrange
         MBR contained = new MBR(new Coord2D(0.0,0.0), new Coord2D(0.5,0.5));
         // act and assert
-        actAndAssertFotContainmentTests(contained, mbr_1);
+        actAndAssertFotContainmentTests(contained, mbr1);
     }
 
     private static void actAndAssertFotContainmentTests(MBR contained, MBR container){

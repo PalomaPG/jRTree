@@ -1,12 +1,13 @@
 package structure;
 
 import org.junit.Test;
-import structure.Coord2D;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 public class Coord2DTest {
+
+    final double delta = 0.00001;
 
     @Test
     public void coordCreation(){
@@ -14,7 +15,6 @@ public class Coord2DTest {
         double x = 1.0;
         double y = 0.5;
         double[] pt = {1.0,0.5};
-        double delta = 0.000000001;
         // act
         Coord2D coord1 = new Coord2D(x,y);
         Coord2D coord2 = new Coord2D(pt);
@@ -55,8 +55,8 @@ public class Coord2DTest {
         double distance1 = pt1.distanceTo(pt2);
         double distance2 = pt2.distanceTo(pt1);
         // assert
-        assertEquals(Math.sqrt(2), distance1, 0.00001);
-        assertEquals(distance1, distance2, 0.00001);
+        assertEquals(Math.sqrt(2), distance1, delta);
+        assertEquals(distance1, distance2, delta);
     }
 
 
