@@ -27,12 +27,17 @@ public class Node extends AbstractNode {
     }
 
     public boolean insert(NodeEntry ne){
-        if (curSize < capacity){
-            data.add(ne);
-            curSize++;
+        data.add(ne);
+        ne.setHost(this);
+        curSize++;
+        if (curSize <=capacity) {
             return true;
         }
-        return false;
+        else {
+            overflow = true;
+            return false;
+        }
+
     }
 
     /**
@@ -59,7 +64,10 @@ public class Node extends AbstractNode {
         return matched.isEmpty() ? null : matched;
     }
 
-    public boolean delete(MBR mbr){ return false;}
+    public boolean delete(MBR mbr){
+
+        return false;
+    }
 
     public boolean isLeaf() {
         return this.isLeaf;
@@ -72,4 +80,5 @@ public class Node extends AbstractNode {
     public ArrayList<NodeEntry> getData() {
         return data;
     }
+
 }

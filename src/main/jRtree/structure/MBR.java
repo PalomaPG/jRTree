@@ -89,31 +89,7 @@ public class MBR {
         }
     }
 
-    public double min_x(){
-        return Math.min(Math.min(pt1.getX(), pt2.getX()), pt3.getX());
 
-    }
-
-    public double max_x(){
-        return Math.max(Math.max(pt1.getX(), pt2.getX()), pt3.getX());
-
-    }
-    public double width(){
-        return max_x()-min_x();
-    }
-
-    public double min_y(){
-        return Math.min(Math.min(pt1.getY(), pt2.getY()), pt3.getY());
-
-    }
-
-    public double max_y(){
-        return Math.max(Math.max(pt1.getY(), pt2.getY()), pt3.getY());
-
-    }
-    public double height(){
-        return max_y()-min_y();
-    }
 
     public double area(){ return height()*width();}
 }

@@ -1,12 +1,16 @@
 package main.jRtree.structure;
 
+import exception.RTreeInsertException;
+
 import java.util.ArrayList;
+import java.util.concurrent.ThreadLocalRandom;
+
 
 public class RTree {
 
-    int nodeSize;
-    NodeSplitter nodeSplitter;
-    Node root;
+    private int nodeSize;
+    private NodeSplitter nodeSplitter;
+    private Node root;
 
 
     public RTree(int nodeSize, NodeSplitter nodeSplitter){
@@ -15,43 +19,94 @@ public class RTree {
         this.root = new Node(nodeSize);
     }
 
-    public void insert(MBR mbr){
-        fakeInsert(new NodeEntry(mbr, new NullNode()), this.root);
-    }
+    public NodeEntry getMinEnlargement(ArrayList<NodeEntry> ne_list) throws  Exception{
 
-    public ArrayList<NodeEntry> fakeInsert(NodeEntry ne, INode node){
-        if (node.isLeaf()){
-            boolean inserted = node.insert(ne);  // O(1)
-            if (!inserted){
-                ArrayList<NodeEntry> newEntries = nodeSplitter.split(ne, node);  // Size 2
-                return newEntries;
+        if(ne_list.isEmpty()) throw new RTreeInsertException("No hay candidatos para recibir MBR");
+        else{
+            if(ne_list.size()==1){
+                return ne_list.remove(0);
             }
-            return null;
+            else{
+                /*Verificar el tamanho de los MBR, si existe uno
+                *+ pequenho que el resto, se pasa ese*/
+                double min_area_mbr = Double.MAX_VALUE;
+                ArrayList<Integer> indexes = new ArrayList<Integer>();
+
+
+                int i;
+                for(i=0;i<ne_list.size();i++){
+                    NodeEntry ne = ne_list.get(i);
+                    double mbr_area = ne.getMBR().area();
+                    if(mbr_area<min_area_mbr){
+                        min_area_mbr = mbr_area;
+                        indexes.clear();
+                        indexes.add(i);
+                    }
+                    else if(mbr_area==min_area_mbr){
+                        indexes.add(i);
+                    }
+
+                }
+
+                if(indexes.isEmpty()) throw new RTreeInsertException("No se encontro minimo MBR");
+                else if(indexes.size()==1){
+                    return ne_list.get(indexes.get(0));
+                }
+
+                else{
+
+                    /*si mas de un MBR tienen igual area que es minima,
+                    se elige uno al azar*/
+
+                    int rnd = ThreadLocalRandom.current().nextInt(0, indexes.size()+1);
+                    return ne_list.get(indexes.get(rnd));
+
+                }
+
+
+
+            }
+        }
+
+    }
+    /*
+    public void insert(MBR mbr) throws Exception{
+
+        fakeInsert(new NodeEntry(mbr, new NullNode()), this.root);
+    }*/
+
+    public void insert(NodeEntry ne, INode node, ArrayList<NodeEntry>track) throws Exception{
+
+        if (node.isLeaf()){
+            node.insert(ne);  // O(1)
         }
 
         ArrayList<NodeEntry> nodeData = node.getData();
-        NodeEntry minEnlargement = null;
-        double lastArea = Double.MAX_VALUE;
-        double min_mbr = Double.MAX_VALUE;
+        NodeEntry minEnlargement;
 
+        double minArea = Double.MAX_VALUE;
+        ArrayList<NodeEntry> candidates = new ArrayList<NodeEntry>();
+        double area;
         for (NodeEntry entry : nodeData){  // O(node.curSize)
-            double area = entry.calculateEnlargement(ne);
-            if (lastArea > area){
-                lastArea = area;
-                minEnlargement = entry;
+            area = entry.calcEnlargement(ne);
+            if(minArea > area){
+                candidates.clear();
+                candidates.add(entry);
             }
-            // Agregar caso si hay mas de uno que puede albergar la nueva entrada
+            else if(minArea==area){
+                candidates.add(entry);
+            }
         }
-        ArrayList<NodeEntry> newEntries = fakeInsert(ne, minEnlargement.getChild());
-        if (!(newEntries.equals(null))){
-            // Si entra aquí debe actualizarse este nodo con las nuevas entradas que vienen de abajo
-        }
-
-        return null;  // Para q no tire warning el IDE
+        minEnlargement = getMinEnlargement(candidates);
+        track.add(minEnlargement);
+        insert(ne, minEnlargement.getChild(), track);
     }
 
     public Node getRoot() {
         return root;
+    }
+    public void setRoot(Node root) {
+        this.root=root;
     }
     public void search(){}
 
