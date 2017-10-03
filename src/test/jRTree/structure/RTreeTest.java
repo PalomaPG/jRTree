@@ -3,16 +3,15 @@ package structure;
 import org.junit.*;
 import org.junit.rules.ExpectedException;
 
-import java.util.ArrayList;
 
-import static org.junit.Assert.*;
-import static org.junit.Assert.assertEquals;
-import static org.hamcrest.CoreMatchers.containsString;
 
 public class RTreeTest {
 
     NodeSplitter nodeSplitter;
     RTree rt, rt2;
+    Node leaf1, leaf2, in;
+    MBR mbr1, mbr2, R1,R2,R3, R4, R5, R6, R7, R8, R9;
+    NodeEntry NE1, NE2;
 
     @Rule
     public ExpectedException thrown;
@@ -24,6 +23,32 @@ public class RTreeTest {
         this.rt = new RTree(nodeSize, this.nodeSplitter);
         this.rt2 = new RTree(nodeSize, this.nodeSplitter);
         this.thrown = ExpectedException.none();
+
+        mbr1 = new MBR(new Coord2D(.0, .0), new Coord2D(.5, .5));
+        mbr2 = new MBR(new Coord2D(.3, .35), new Coord2D(.4, .8));
+
+        in = new Node(3);
+        in.setIsLeaf(false);
+        leaf1 = new Node(4);
+        leaf2 = new Node(4);
+
+
+        R1 = new MBR(new Coord2D(1,9), new Coord2D(10,18));
+        R2 = new MBR(new Coord2D(8,1), new Coord2D(20,12));
+        R3 = new MBR(new Coord2D(9,13), new Coord2D(10,17));
+        R4 = new MBR(new Coord2D(2, 11), new Coord2D(7,15));
+        R5 = new MBR(new Coord2D(13,6),new Coord2D(17,11));
+
+        R6 = new MBR(new Coord2D(9,17), new Coord2D(22,26));
+        R7 = new MBR(new Coord2D(8.5, 1.3), new Coord2D(12.8, 7.5));
+
+        R8 = new MBR(new Coord2D(2,15), new Coord2D(6,17));
+        R9 = new MBR(new Coord2D(15,4), new Coord2D(23,8));
+
+        NE1 = new NodeEntry(R1,leaf1, in);
+        leaf1.setParent(NE1);
+        NE2 = new NodeEntry(R2, leaf2, in);
+        leaf2.setParent(NE2);
     }
 
     /**
@@ -31,31 +56,8 @@ public class RTreeTest {
      */
     @Test
     public void insertTest() throws Exception {
-        MBR mbr1 = new MBR(new Coord2D(.0, .0), new Coord2D(.5, .5));
-        MBR mbr2 = new MBR(new Coord2D(.3, .35), new Coord2D(.4, .8));
-
-        INode in = new Node(3);
-        in.setIsLeaf(false);
-        INode leaf1 = new Node(4);
-        INode leaf2 = new Node(4);
 
 
-        MBR R1 = new MBR(new Coord2D(1,9), new Coord2D(10,18));
-        MBR R2 = new MBR(new Coord2D(8,1), new Coord2D(20,12));
-        MBR R3 = new MBR(new Coord2D(9,13), new Coord2D(10,17));
-        MBR R4 = new MBR(new Coord2D(2, 11), new Coord2D(7,15));
-        MBR R5 = new MBR(new Coord2D(13,6),new Coord2D(17,11));
-
-        MBR R6 = new MBR(new Coord2D(9,17), new Coord2D(22,26));
-        MBR R7 = new MBR(new Coord2D(8.5, 1.3), new Coord2D(12.8, 7.5));
-
-        MBR R8 = new MBR(new Coord2D(2,15), new Coord2D(6,17));
-        MBR R9 = new MBR(new Coord2D(15,4), new Coord2D(23,8));
-
-        NodeEntry NE1 = new NodeEntry(R1,leaf1, in);
-        leaf1.setParent(NE1);
-        NodeEntry NE2 = new NodeEntry(R2, leaf2, in);
-        leaf2.setParent(NE2);
         NodeEntry NE3 = new NodeEntry(R3, null, leaf1);
         NodeEntry NE4 = new NodeEntry(R4, null, leaf1);
         NodeEntry NE5 = new NodeEntry(R5, null, leaf2);
@@ -83,6 +85,20 @@ public class RTreeTest {
         Assert.assertEquals(leaf4, leaf1);
         Assert.assertEquals(leaf5, leaf2);
         rt2.adjust(leaf5,R9);
+        Assert.assertFalse(leaf2.overflow());
+        Assert.assertFalse(leaf1.overflow());
+
+        MBR R10 = new MBR(new Coord2D(11,8), new Coord2D(12,15));
+        leaf = rt2.insert(R10);
+        Assert.assertEquals(leaf, leaf2);
+        rt2.adjust(leaf,R10);
+        Assert.assertFalse(leaf2.overflow());
+
+        MBR R11 = new MBR(new Coord2D(9,8), new Coord2D(15,13));
+        leaf = rt2.insert(R11);
+        Assert.assertEquals(leaf, leaf2);
+        Assert.assertTrue(leaf2.overflow());
+        rt2.adjust(leaf,R10);
     }
 
     /*
