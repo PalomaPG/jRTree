@@ -1,4 +1,6 @@
-package structure;
+package test.jRTree.structure;
+
+import main.jRtree.structure.*;
 
 import org.junit.Assert;
 import org.junit.Before;

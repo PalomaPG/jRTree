@@ -1,11 +1,8 @@
-package structure;
+package test.jRTree.structure;
 
 import org.junit.Assert;
 import org.junit.Test;
-import structure.INode;
-import structure.MBR;
-import structure.Node;
-import structure.NodeEntry;
+
 
 import java.util.ArrayList;
 

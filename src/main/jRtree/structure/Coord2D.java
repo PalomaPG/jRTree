@@ -1,4 +1,4 @@
-package structure;// Simple class to represent two-dimensional coordinates of real numbers
+package main.jRtree.structure;// Simple class to represent two-dimensional coordinates of real numbers
 
 public class Coord2D {
 

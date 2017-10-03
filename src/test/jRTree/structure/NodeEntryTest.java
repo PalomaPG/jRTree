@@ -1,9 +1,10 @@
-package structure;
+package test.jRTree.structure;
 
 import org.junit.*;
 import org.junit.rules.ExpectedException;
 
-import structure.NodeEntry;
+import main.jRtree.structure.*;
+
 
 import static org.junit.Assert.assertEquals;
 

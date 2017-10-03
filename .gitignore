@@ -26,7 +26,3 @@ hs_err_pid*
 .idea/
 .directory
 src/.directory
-jRTree.iml
-synthdata-N8.csv
-target/generated-sources/
-target/generated-test-sources/
