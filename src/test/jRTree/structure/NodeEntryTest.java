@@ -51,7 +51,7 @@ public class NodeEntryTest{
         assertEquals(30, enlargement, delta);
     }
 
-    @Ignore
+/*    @Ignore
     @Test
     public void hosting(){
         //arrange
@@ -96,5 +96,5 @@ public class NodeEntryTest{
         Assert.assertFalse(in.isLeaf());
         Assert.assertEquals(NE7.getHost(), leaf2);
         Assert.assertEquals(NE6.getHost(), in);
-    }
+    }*/
 }
