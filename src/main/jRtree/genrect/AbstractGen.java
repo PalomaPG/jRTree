@@ -1,12 +1,12 @@
 package genrect;
 
-import java.io.RandomAccessFile;
+import java.io.FileWriter;
 
 public abstract class AbstractGen {
 
 		protected int N;
 		protected String filename;
-		protected RandomAccessFile raf;
+		protected FileWriter fw;
 		
 		public void setN(int n) {
 			this.N= (int)Math.pow(2,n);

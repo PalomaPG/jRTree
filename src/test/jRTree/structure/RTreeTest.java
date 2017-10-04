@@ -78,7 +78,7 @@ public class RTreeTest {
         Node leaf = rt.insert(mbr1);
         Assert.assertNotNull(leaf);
         Assert.assertEquals(leaf, rt.getRoot());
-        rt2.setRoot((Node)in);
+        rt2.setRoot(in);
         Node leaf4 = rt2.insert(R8);
         Node leaf5 = rt2.insert(R9);
 

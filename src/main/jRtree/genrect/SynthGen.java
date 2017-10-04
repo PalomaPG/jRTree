@@ -2,7 +2,8 @@ package genrect;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.RandomAccessFile;
+import java.io.FileWriter;
+import java.text.DecimalFormat;
 import java.util.Random;
 
 public class SynthGen extends AbstractGen {
@@ -15,9 +16,11 @@ public class SynthGen extends AbstractGen {
 		this.N = (int)Math.pow(2, n);
 		this.filename = String.format(pwd+"/synthdata-N%d.csv", N);
 		try {
-			this.raf = new RandomAccessFile(filename, "rw");
+			this.fw = new FileWriter(filename);
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
@@ -38,7 +41,10 @@ public class SynthGen extends AbstractGen {
 	@Override
 	public double[] coords(double [] rd) {
 		// TODO Auto-generated method stub
-		return null;
+        double [] extremes = new double[4];
+        rd[2] = rd[0]+rd[2];
+        rd[3] = rd[1]+rd[3];
+		return rd;
 	}
 
 	@Override
@@ -51,17 +57,23 @@ public class SynthGen extends AbstractGen {
 	public void writeFile() {
 		// TODO Auto-generated method stub
 		for(int i=0; i<N; i++) {
-			double [] d = genSingleRectangle();
+			double [] d = coords(genSingleRectangle());
 			try {
-
-				this.raf.writeChars(String.format("%f,%f,%f,%f\n", d[0], d[1], d[2], d[3]));
+                DecimalFormat formatter = new DecimalFormat("000000.000000");
+				this.fw.write(String.format("%s,%s,%s,%s\n", formatter.format(d[0]),
+                        formatter.format(d[1]), formatter.format(d[2]), formatter.format(d[3])));
 				}
 			catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
-	}
+        try {
+            this.fw.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 	
 	
 }

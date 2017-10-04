@@ -28,5 +28,7 @@ hs_err_pid*
 src/.directory
 jRTree.iml
 synthdata-N8.csv
+samsynthdata-N8.csv
 target/generated-sources/
 target/generated-test-sources/
+src/main/jRtree/genrect/Sample2search.java
