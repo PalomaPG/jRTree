@@ -5,10 +5,7 @@ import org.junit.Test;
 
 import java.util.ArrayList;
 
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
+import static org.junit.Assert.*;
 
 
 /**
@@ -28,15 +25,6 @@ public class NodeTest {
         // assert
         assertEquals(capacity, n.getCapacity());
         assertEquals(0, n.getCurSize());
-
-        Node n1 = new Node(capacity, new NodeEntry(new MBR(new Coord2D(0,1), new Coord2D(3,6)),
-                new Node(capacity), new Node(capacity)));
-
-        NodeEntry p = new NodeEntry(new MBR(new Coord2D(0,1), new Coord2D(3,6)),
-                new Node(capacity), new Node(capacity));
-
-        assertEquals(n1.getParent().getMBR().area(), new Node(capacity, p).getParent().getMBR().area(), 0.000001);
-
     }
 
 
@@ -96,6 +84,18 @@ public class NodeTest {
 //        assertEquals(0, n.getCurSize());
         assertFalse(n.delete(mbr_2));  // Can't delete again
 //        assertEquals(0, n.getCurSize());
+    }
+
+
+    @Test
+    public void equalsTest(){ /* equal without overriding */
+        // arrange
+        Node n1 = new Node(1);
+        Node n2 = new Node(1);
+        // act
+        // assert
+        assertEquals(n1, n1);
+        assertNotEquals(n1,n2);
     }
 
 }
