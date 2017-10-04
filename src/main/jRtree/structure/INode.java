@@ -19,4 +19,6 @@ public interface INode {
 
     ArrayList<NodeEntry> getData();
 
+    void replace(NodeEntry oldEntry, NodeEntry newEntry);
+
 }

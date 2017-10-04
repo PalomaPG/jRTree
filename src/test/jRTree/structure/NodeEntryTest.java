@@ -51,6 +51,7 @@ public class NodeEntryTest{
         assertEquals(30, enlargement, delta);
     }
 
+    @Ignore
     @Test
     public void hosting(){
         //arrange
@@ -64,11 +65,10 @@ public class NodeEntryTest{
         MBR R3 = new MBR(new Coord2D(9,13), new Coord2D(10,17));
         MBR R4 = new MBR(new Coord2D(2, 11), new Coord2D(7,15));
         MBR R5 = new MBR(new Coord2D(13,6),new Coord2D(17,11));
-
         MBR R6 = new MBR(new Coord2D(9,17), new Coord2D(22,26));
         MBR R7 = new MBR(new Coord2D(8.5, 1.3), new Coord2D(12.8, 7.5));
 
-        NodeEntry NE1 = new NodeEntry(R1,leaf1, in);
+        NodeEntry NE1 = new NodeEntry(R1, leaf1, in);
         NodeEntry NE2 = new NodeEntry(R2, leaf2, in);
         NodeEntry NE3 = new NodeEntry(R3, null, leaf1);
         NodeEntry NE4 = new NodeEntry(R4, null, leaf1);

@@ -9,6 +9,7 @@ import org.junit.Test;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertFalse;
 
 public class RTreeTest {
 
@@ -41,6 +42,25 @@ public class RTreeTest {
         // assert
         assertEquals(2, this.rt.getRoot().getCurSize());
         assertTrue(this.rt.getRoot().isLeaf());
+    }
+
+    @Test
+    public void insertWithOverflowUsingLinearSplit(){
+        // arrange
+        MBR mbr1 = new MBR(new Coord2D(0,0), new Coord2D(1,1));
+        MBR mbr2 = new MBR(new Coord2D(9,9), new Coord2D(10,10));
+        MBR mbr3 = new MBR(new Coord2D(1,1), new Coord2D(1.5,1.5));
+        MBR mbr4 = new MBR(new Coord2D(8,9), new Coord2D(9,10));
+        // act
+        rt.insert(mbr1);
+        rt.insert(mbr2);
+        rt.insert(mbr3);
+        rt.insert(mbr4);  /* Overflow occurs here */
+        // assert
+        INode root = rt.getRoot();
+        assertFalse(root.isLeaf());
+        assertEquals(3, root.getCapacity());
+        assertEquals(2, root.getCurSize());
     }
 
     @Ignore

@@ -38,14 +38,11 @@ public class RTree {
                 return neList.get(indices.get(0));
             } else{
                 /* If there are more than one with the same area, should choose one randomly and return it */
-
                 int rnd = (int) Math.floor(Math.random()*(indices.size()+1));
                 return neList.get(indices.get(rnd));
-
             }
         }
     }
-
 
     public void insert(MBR mbr){
         realInsert(new NodeEntry(mbr, new NullNode()), this.root);
@@ -53,41 +50,69 @@ public class RTree {
 
     //public void insert(NodeEntry ne, INode node, ArrayList<NodeEntry>track){
     private ArrayList<NodeEntry> realInsert(NodeEntry ne, INode node){
-
+        /* Base case leaf node */
         if (node.isLeaf()){
             boolean inserted = node.insert(ne);  // O(1)
+            ArrayList<NodeEntry> newEntries;
             if (!inserted){
-                ArrayList<NodeEntry> newEntries = nodeSplitter.split(ne, node);  // Size 2
-                return newEntries;
-            } else {
-                return new ArrayList<NodeEntry>(0);
+                newEntries = nodeSplitter.split(ne, node);  // Size 2
+                if (this.root.isLeaf()){
+                    /* Just happens once. When the root overflows must create a new root, but since was a leaf
+                     * realInsert returns at insert method. That's why the new root should be created here */
+                    newRoot(newEntries);
+                }
+            } else { /* MBR was inserted. Should return an ArrayList with a NodeEntry with updated MBR. In overflow case
+             (above), the Splitter should be responsible of calculating new MBRs.
+             The containing MBR should always increase because inserted MBR isn't inside old ones */
+                newEntries = new ArrayList<NodeEntry>(1);
+                newEntries.add(newUpdatedNodeEntry(node));
             }
+            return newEntries;
         }
-
+        /* General case non-leaf node */
         ArrayList<NodeEntry> nodeData = node.getData();
-        double minArea = Double.MAX_VALUE;
+        double minAreaGrowth = Double.MAX_VALUE;
         ArrayList<NodeEntry> candidates = new ArrayList<NodeEntry>();
-        double area;
+        double areaGrowth;
         for (NodeEntry entry : nodeData){  // O(node.curSize)
-            area = entry.calculateEnlargement(ne);
-            if(minArea > area){
+            areaGrowth = entry.calculateEnlargement(ne);
+            if(minAreaGrowth > areaGrowth){
                 candidates.clear();
                 candidates.add(entry);
-            }
-            else if(minArea==area){
+            } else if(minAreaGrowth==areaGrowth){
+                /* Multiple entries have to grow the same and are minimum at this moment*/
                 candidates.add(entry);
             }
-            // Agregar caso si hay mas de uno que puede albergar la nueva entrada
         }
         NodeEntry minEnlargement = getMinEnlargement(candidates);
-        ArrayList<NodeEntry> newEntries = realInsert(ne, minEnlargement.getChild());
+        ArrayList<NodeEntry> newEntries = realInsert(ne, minEnlargement.getChild()); /* <- Recursive call 'ö' */
         if (!(newEntries.isEmpty())){
-            // Si entra aquí debe actualizarse este nodo con las nuevas entradas que vienen de abajo
-
+            /* Si entra aquí debe actualizarse este nodo con las nuevas entradas que vienen de abajo.
+            No debería ser vacío nunca pues al menos devuelve un NodeEntry con el MBR actualizado hacia arriba.
+            Al menos una de las nuevas entradas debe reemplazar al NodeEntry apuntado por minEnlargement, el otro
+            (si es que existe) debe insertarse y chequear si hay overflow */
+            node.replace(minEnlargement, newEntries.get(0));
+            ArrayList<NodeEntry> possibleNewEntries;
+            try {
+                boolean inserted = node.insert(newEntries.get(1));
+                if (!inserted){ /* Overflow */
+                    possibleNewEntries = nodeSplitter.split(newEntries.get(1), node);
+                    possibleNewEntries.get(0).getChild().setIsLeaf(false);
+                    possibleNewEntries.get(1).getChild().setIsLeaf(false);
+                    if (node.equals(this.root)){ /* Implementar este equals */
+                        /* Se debe crear nueva raiz e insertar las nuevas entradas antes de retornar */
+                        newRoot(possibleNewEntries);
+                    }
+                    return possibleNewEntries;
+                }
+            } catch (IndexOutOfBoundsException exception){
+                /* Updating above MBR. Optional: Add a flag in realInsert to know if recalculating MBR is necessary */
+                newEntries.clear();
+                newEntries.add(newUpdatedNodeEntry(node));
+                return newEntries;
+            }
         }
-        return newEntries;
-        //track.add(minEnlargement);
-        //insert(ne, minEnlargement.getChild(), track);
+        return null;  /* Just to accomplish the signature*/
     }
 
     public Node getRoot() {
@@ -98,6 +123,20 @@ public class RTree {
         this.root=root;
     }
 
-    public void search(){}
+    public ArrayList<MBR> search(MBR mbr){
+        return this.root.search(mbr);
+    }
 
+    private void newRoot(ArrayList<NodeEntry> newEntries){
+        this.root = new Node(this.nodeSize);
+        this.root.setIsLeaf(false);  /* <-- very important */
+        for (NodeEntry nodeEntry : newEntries){  /* Optional: Create a insertAll method at Node class */
+            this.root.insert(nodeEntry);
+        }
+    }
+
+    private NodeEntry newUpdatedNodeEntry(INode childNode){
+        MBR newMBR = nodeSplitter.calculateMBR(childNode.getData());
+        return new NodeEntry(newMBR, childNode);
+    }
 }

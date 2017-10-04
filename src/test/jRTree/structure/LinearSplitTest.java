@@ -54,8 +54,10 @@ public class LinearSplitTest {
         expectedNode2.insert(ne4);
         // act
         ArrayList<NodeEntry> splittedNodes = ls.split(ne4, node);
-        INode left = splittedNodes.get(0).getChild();
-        INode right = splittedNodes.get(1).getChild();
+        NodeEntry neLeft = splittedNodes.get(0);
+        NodeEntry neRight = splittedNodes.get(1);
+        INode left = neLeft.getChild();
+        INode right = neRight.getChild();
 
         // assert
         assertTrue(left.getData().containsAll(expectedNode1.getData()) ||
@@ -63,5 +65,8 @@ public class LinearSplitTest {
         assertTrue(right.getData().containsAll(expectedNode1.getData()) ||
                 right.getData().containsAll(expectedNode2.getData()));
         assertFalse(left.getData().containsAll(right.getData()));
+        // MBRs should be tested too
+        assertEquals(new MBR(ne1.getMBR().getPt2(), ne3.getMBR().getPt4()), neLeft.getMBR());
+        assertEquals(new MBR(ne4.getMBR().getPt2(), ne2.getMBR().getPt4()), neRight.getMBR());
     }
 }

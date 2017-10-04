@@ -7,4 +7,6 @@ public interface NodeSplitter {
     ArrayList<NodeEntry> split(NodeEntry ne, INode node);
 
     ArrayList<NodeEntry> chooseFarthestMBRs(ArrayList<NodeEntry> nodeEntries);
+
+    MBR calculateMBR(ArrayList<NodeEntry> nodeEntries);
 }

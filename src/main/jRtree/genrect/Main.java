@@ -6,10 +6,10 @@ public class Main {
 
 		public static void main(String[] args) {
 			
-			synthgenRutine();
+			synthgenRoutine();
 		}
 		
-		public static void synthgenRutine() {
+		public static void synthgenRoutine() {
 		    String path = ".";
 			System.err.println("INIT - Synthetic data generation");
 			SynthGen sg = new SynthGen(3, path);

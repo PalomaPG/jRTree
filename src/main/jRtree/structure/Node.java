@@ -31,7 +31,7 @@ public class Node extends AbstractNode {
         return this.curSize;
     }
 
-    public boolean insert(NodeEntry ne){
+/*    public boolean insert(NodeEntry ne){
         data.add(ne);
         ne.setHost(this);
         curSize++;
@@ -43,6 +43,15 @@ public class Node extends AbstractNode {
             return false;
         }
 
+    }*/
+
+    public boolean insert(NodeEntry ne){
+        if (curSize < capacity) {
+            data.add(ne);
+            curSize++;
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -67,6 +76,15 @@ public class Node extends AbstractNode {
             }
         }
         return matched.isEmpty() ? null : matched;
+    }
+
+    /* This does exactly that, replace an oldEntry by a new one.
+     * Nothing happens if oldEntry is not in data */
+    public void replace(NodeEntry oldEntry, NodeEntry newEntry){
+        int toBeReplaced = data.indexOf(oldEntry);
+        if (toBeReplaced >= 0){
+            data.set(toBeReplaced, newEntry);
+        }
     }
 
     public boolean delete(MBR mbr){

@@ -35,4 +35,6 @@ public class NullNode extends AbstractNode {
     public ArrayList<NodeEntry> getData() {
         return null;
     }
+
+    public void replace(NodeEntry oldEntry, NodeEntry newEntry){}
 }
