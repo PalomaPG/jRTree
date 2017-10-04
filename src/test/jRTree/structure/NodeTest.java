@@ -1,13 +1,14 @@
-package test.jRTree.structure;
+package structure;
 
-import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
-
 
 import java.util.ArrayList;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 
 /**
@@ -34,7 +35,7 @@ public class NodeTest {
         NodeEntry p = new NodeEntry(new MBR(new Coord2D(0,1), new Coord2D(3,6)),
                 new Node(capacity), new Node(capacity));
 
-        Assert.assertEquals(n1.getParent().getMBR().area(), new Node(capacity, p).getParent().getMBR().area(), 0.000001);
+        assertEquals(n1.getParent().getMBR().area(), new Node(capacity, p).getParent().getMBR().area(), 0.000001);
 
     }
 
@@ -64,21 +65,23 @@ public class NodeTest {
     @Test
     public void nodeSearchTest(){
         // arrange
-        MBR mbr_1 = new MBR(new double[][] {{0,0},{0,0},{0,0},{0,0}});
-        MBR mbr_2 = new MBR(new double[][] {{1,1},{0,1},{0,0},{1,0}});
+        MBR mbr1 = new MBR(new double[][] {{0,0},{0,0},{0,0},{0,0}});  /* Coordinates have no sense but aren't important
+                                                                          for this test */
+        MBR mbr2 = new MBR(new double[][] {{1,1},{0,1},{0,0},{1,0}});
         INode n = new Node(1);
-        n.insert(new NodeEntry(mbr_1, null));  // insert should accept structure.NodeEntry and structure.MBR objects
+        n.insert(new NodeEntry(mbr1, null));  // insert should accept structure.NodeEntry and structure.MBR objects
         // act
-        ArrayList<MBR> mbrArray_1 = n.search(mbr_1);  // Searching is always about data in a structure.NodeEntry
-        ArrayList<MBR> mbrArray_2 = n.search(mbr_2);
+        ArrayList<MBR> mbrArray1 = n.search(mbr1);  // Searching is always about data in a structure.NodeEntry
+        ArrayList<MBR> mbrArray2 = n.search(mbr2);
         // assert
-        assertTrue(mbrArray_1.contains(mbr_1));
-        assertNull(mbrArray_2);
+        assertTrue(mbrArray1.contains(mbr1));
+        assertNull(mbrArray2);
     }
 
     /**
      * Test deleting elements from a structure.Node.
      */
+    @Ignore
     @Test
     public void nodeDeleteTest(){
         // arrange

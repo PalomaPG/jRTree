@@ -1,13 +1,14 @@
-package test.jRTree.structure;
+package structure;
 
-import main.jRtree.structure.*;
-
-import org.junit.*;
+import org.junit.Before;
+import org.junit.Ignore;
+import org.junit.Rule;
 import org.junit.rules.ExpectedException;
+import org.junit.Test;
 
-import static org.junit.Assert.*;
-import static org.junit.Assert.assertEquals;
 import static org.hamcrest.CoreMatchers.containsString;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class RTreeTest {
 
@@ -15,7 +16,7 @@ public class RTreeTest {
     RTree rt;
 
     @Rule
-    ExpectedException thrown;
+    public ExpectedException thrown;
 
     @Before
     public void setUp(){
@@ -25,18 +26,10 @@ public class RTreeTest {
         this.thrown = ExpectedException.none();
     }
 
-    @After
-    public void tearDown(){
-        this.nodeSplitter = null;
-        this.rt = null;
-        this.thrown = null;
-    }
-
-
     /**
      * Insertion tests
      */
-    /*
+
     @Test
     public void insertNotContainingMBRs(){
         // arrange
@@ -64,25 +57,5 @@ public class RTreeTest {
         // assert
         // No assert section because execution should not pass last insert.
     }
-    */
-    /**
-     * This test tries to check if a split operation happened.
-     * After a split (wherever used) the number of nodes increases.
-     */
-    /*
-    @Test
-    public void overflowHandle(){
-        // arrange
-        MBR mbr1 = new MBR(new Coord2D(.0, .0), new Coord2D(.5, .5));
-        MBR mbr2 = new MBR(new Coord2D(.3, .35), new Coord2D(.4, .8));
-        MBR mbr3 = new MBR(new Coord2D(-1, -1), new Coord2D(-0.5, -0.5));
-        MBR mbr4 = new MBR(new Coord2D(1.5, 1.5), new Coord2D(2, 2));
-        // act
-        rt.insert(mbr1);
-        rt.insert(mbr2);
-        rt.insert(mbr3);
-        rt.insert(mbr4);
-        // assert
-        //assertTrue(rt.size()>1);
-    }*/
+
 }

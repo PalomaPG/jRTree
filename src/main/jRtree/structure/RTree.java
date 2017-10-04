@@ -1,10 +1,6 @@
-package main.jRtree.structure;
-
-import exception.RTreeInsertException;
+package structure;
 
 import java.util.ArrayList;
-import java.util.concurrent.ThreadLocalRandom;
-
 
 public class RTree {
 
@@ -12,83 +8,68 @@ public class RTree {
     private NodeSplitter nodeSplitter;
     private Node root;
 
-
     public RTree(int nodeSize, NodeSplitter nodeSplitter){
         this.nodeSize = nodeSize;
         this.nodeSplitter = nodeSplitter;
         this.root = new Node(nodeSize);
     }
 
-    public NodeEntry getMinEnlargement(ArrayList<NodeEntry> ne_list) throws  Exception{
+    public NodeEntry getMinEnlargement(ArrayList<NodeEntry> neList){
+        if(neList.size()==1){
+            return neList.remove(0);
+        } else {
+            /* Verify the size of the MBRs and return the smallest */
+            double minAreaMBR = Double.MAX_VALUE;
+            ArrayList<Integer> indices = new ArrayList<Integer>();
 
-        if(ne_list.isEmpty()) throw new RTreeInsertException("No hay candidatos para recibir MBR");
-        else{
-            if(ne_list.size()==1){
-                return ne_list.remove(0);
+            for(int i=0;i<neList.size();i++){
+                NodeEntry ne = neList.get(i);
+                double mbrArea = ne.getMBR().area();
+                if(mbrArea<minAreaMBR){
+                    minAreaMBR = mbrArea;
+                    indices.clear();
+                    indices.add(i);
+                } else if(mbrArea==minAreaMBR){
+                    indices.add(i);
+                }
             }
-            else{
-                /*Verificar el tamanho de los MBR, si existe uno
-                *+ pequenho que el resto, se pasa ese*/
-                double min_area_mbr = Double.MAX_VALUE;
-                ArrayList<Integer> indexes = new ArrayList<Integer>();
 
+            if(indices.size()==1){
+                return neList.get(indices.get(0));
+            } else{
+                /* If there are more than one with the same area, should choose one randomly and return it */
 
-                int i;
-                for(i=0;i<ne_list.size();i++){
-                    NodeEntry ne = ne_list.get(i);
-                    double mbr_area = ne.getMBR().area();
-                    if(mbr_area<min_area_mbr){
-                        min_area_mbr = mbr_area;
-                        indexes.clear();
-                        indexes.add(i);
-                    }
-                    else if(mbr_area==min_area_mbr){
-                        indexes.add(i);
-                    }
-
-                }
-
-                if(indexes.isEmpty()) throw new RTreeInsertException("No se encontro minimo MBR");
-                else if(indexes.size()==1){
-                    return ne_list.get(indexes.get(0));
-                }
-
-                else{
-
-                    /*si mas de un MBR tienen igual area que es minima,
-                    se elige uno al azar*/
-
-                    int rnd = ThreadLocalRandom.current().nextInt(0, indexes.size()+1);
-                    return ne_list.get(indexes.get(rnd));
-
-                }
-
-
+                int rnd = (int) Math.floor(Math.random()*(indices.size()+1));
+                return neList.get(indices.get(rnd));
 
             }
         }
-
     }
-    /*
-    public void insert(MBR mbr) throws Exception{
 
-        fakeInsert(new NodeEntry(mbr, new NullNode()), this.root);
-    }*/
 
-    public void insert(NodeEntry ne, INode node, ArrayList<NodeEntry>track) throws Exception{
+    public void insert(MBR mbr){
+        realInsert(new NodeEntry(mbr, new NullNode()), this.root);
+    }
+
+    //public void insert(NodeEntry ne, INode node, ArrayList<NodeEntry>track){
+    private ArrayList<NodeEntry> realInsert(NodeEntry ne, INode node){
 
         if (node.isLeaf()){
-            node.insert(ne);  // O(1)
+            boolean inserted = node.insert(ne);  // O(1)
+            if (!inserted){
+                ArrayList<NodeEntry> newEntries = nodeSplitter.split(ne, node);  // Size 2
+                return newEntries;
+            } else {
+                return new ArrayList<NodeEntry>(0);
+            }
         }
 
         ArrayList<NodeEntry> nodeData = node.getData();
-        NodeEntry minEnlargement;
-
         double minArea = Double.MAX_VALUE;
         ArrayList<NodeEntry> candidates = new ArrayList<NodeEntry>();
         double area;
         for (NodeEntry entry : nodeData){  // O(node.curSize)
-            area = entry.calcEnlargement(ne);
+            area = entry.calculateEnlargement(ne);
             if(minArea > area){
                 candidates.clear();
                 candidates.add(entry);
@@ -96,18 +77,27 @@ public class RTree {
             else if(minArea==area){
                 candidates.add(entry);
             }
+            // Agregar caso si hay mas de uno que puede albergar la nueva entrada
         }
-        minEnlargement = getMinEnlargement(candidates);
-        track.add(minEnlargement);
-        insert(ne, minEnlargement.getChild(), track);
+        NodeEntry minEnlargement = getMinEnlargement(candidates);
+        ArrayList<NodeEntry> newEntries = realInsert(ne, minEnlargement.getChild());
+        if (!(newEntries.isEmpty())){
+            // Si entra aquí debe actualizarse este nodo con las nuevas entradas que vienen de abajo
+
+        }
+        return newEntries;
+        //track.add(minEnlargement);
+        //insert(ne, minEnlargement.getChild(), track);
     }
 
     public Node getRoot() {
         return root;
     }
+
     public void setRoot(Node root) {
         this.root=root;
     }
+
     public void search(){}
 
 }

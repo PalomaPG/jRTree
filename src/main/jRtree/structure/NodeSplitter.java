@@ -1,8 +1,10 @@
-package main.jRtree.structure;
+package structure;
 
 import java.util.ArrayList;
 
 public interface NodeSplitter {
 
     ArrayList<NodeEntry> split(NodeEntry ne, INode node);
+
+    ArrayList<NodeEntry> chooseFarthestMBRs(ArrayList<NodeEntry> nodeEntries);
 }

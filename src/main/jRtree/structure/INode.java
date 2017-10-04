@@ -1,4 +1,4 @@
-package main.jRtree.structure;
+package structure;
 
 import java.util.ArrayList;
 

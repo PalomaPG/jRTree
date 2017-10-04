@@ -1,4 +1,4 @@
-package main.jRtree.genrect;
+package genrect;
 
 
 public class Main {

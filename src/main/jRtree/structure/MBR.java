@@ -1,4 +1,4 @@
-package main.jRtree.structure;
+package structure;
 
 /**
  * structure.MBR implementation. Assumes 2D rectangles, doesn't make any check.
@@ -89,7 +89,27 @@ public class MBR {
         }
     }
 
+    /**
+     * A 2d rectangle contains another if its left-bottom and top-right corners are outside the other.
+     * Can share sides and at most 2 corners. If they share 3 then share 4 and mbr1 is equals to mbr2.
+     */
+    public boolean contains(MBR mbr){
+        Coord2D oPt2 = mbr.getPt2();
+        Coord2D oPt4 = mbr.getPt4();
+        // Is strictly at south-west or south but share axis Y or west but share axis X or are equals
+        boolean leastLB = (this.pt2.isAtSouth(oPt2) || this.pt2.getY().equals(oPt2.getY())) &&
+                (this.pt2.isAtWest(oPt2) || this.pt2.getX().equals(oPt2.getX()));
+        // Is strictly at north-east or north but share axis Y or east but share axis X or are equals
+        boolean mostTP = (this.pt4.isAtNorth(oPt4) || this.pt4.getY().equals(oPt4.getY())) &&
+                (this.pt4.isAtEast(oPt4) || this.pt4.getX().equals(oPt4.getX()));
+        return leastLB && mostTP;
+    }
 
+    public double height(){
+        return this.pt4.getY() - this.pt2.getY();
+    }
+
+    public double width() {return this.pt4.getX() - this.pt2.getX();}
 
     public double area(){ return height()*width();}
 }

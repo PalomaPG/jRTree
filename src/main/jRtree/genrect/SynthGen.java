@@ -1,4 +1,4 @@
-package main.jRtree.genrect;
+package genrect;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
