@@ -98,16 +98,16 @@ public class LinearSplitter implements NodeSplitter{
         double xDistanceUp = xLength;
         double yDistanceDown = yLength;
         double yDistanceUp = yLength;
-        final double xTop = tempMBR.getPt4().getX();
-        final double xDown = tempMBR.getPt2().getX();
-        final double yTop = tempMBR.getPt4().getY();
-        final double yDown = tempMBR.getPt2().getY();
+        final double xTop = tempMBR.getTopRight().getX();
+        final double xDown = tempMBR.getLeftBottom().getX();
+        final double yTop = tempMBR.getTopRight().getY();
+        final double yDown = tempMBR.getLeftBottom().getY();
         for (NodeEntry nodeEntry : nodeEntries){
             MBR currentMBR = nodeEntry.getMBR();
-            double curXTop = currentMBR.getPt4().getX();
-            double curXDown = currentMBR.getPt2().getX();
-            double curYTop = currentMBR.getPt4().getY();
-            double curYDown = currentMBR.getPt2().getY();
+            double curXTop = currentMBR.getTopRight().getX();
+            double curXDown = currentMBR.getLeftBottom().getX();
+            double curYTop = currentMBR.getTopRight().getY();
+            double curYDown = currentMBR.getLeftBottom().getY();
             if (curXTop - xDown < xDistanceDown){
                 xDistanceDown = curXTop - xDown;
                 xLower = nodeEntry;
@@ -152,10 +152,10 @@ public class LinearSplitter implements NodeSplitter{
         double highY = -1 * Double.MIN_VALUE;
         for (NodeEntry ne : nodeEntries){
             MBR mbr = ne.getMBR();
-            double mbrLowX = mbr.getPt2().getX();
-            double mbrHighX = mbr.getPt4().getX();
-            double mbrLowY = mbr.getPt2().getY();
-            double mbrHighY = mbr.getPt4().getY();
+            double mbrLowX = mbr.getLeftBottom().getX();
+            double mbrHighX = mbr.getTopRight().getX();
+            double mbrLowY = mbr.getLeftBottom().getY();
+            double mbrHighY = mbr.getTopRight().getY();
             lowX = lowX > mbrLowX ? mbrLowX : lowX;
             lowY = lowY > mbrLowY ? mbrLowY : lowY;
             highX = highX < mbrHighX ? mbrHighX : highX;

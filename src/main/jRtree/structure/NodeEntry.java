@@ -37,15 +37,15 @@ public class NodeEntry{
     public double calculateEnlargement(NodeEntry ne){
         MBR neMBR = ne.getMBR();
         // Coordenadas del MBR de este NodeEntry
-        double minX = mbr.getPt2().getX();
-        double minY = mbr.getPt2().getY();
-        double maxX = mbr.getPt4().getX();
-        double maxY = mbr.getPt4().getY();
+        double minX = mbr.getLeftBottom().getX();
+        double minY = mbr.getLeftBottom().getY();
+        double maxX = mbr.getTopRight().getX();
+        double maxY = mbr.getTopRight().getY();
 
-        double neMinX = neMBR.getPt2().getX();
-        double neMinY = neMBR.getPt2().getY();
-        double neMaxX = neMBR.getPt4().getX();
-        double neMaxY = neMBR.getPt4().getY();
+        double neMinX = neMBR.getLeftBottom().getX();
+        double neMinY = neMBR.getLeftBottom().getY();
+        double neMaxX = neMBR.getTopRight().getX();
+        double neMaxY = neMBR.getTopRight().getY();
 
         return (Math.max(maxX, neMaxX) - Math.min(minX, neMinX))*
                 (Math.max(maxY, neMaxY) - Math.min(minY, neMinY))-mbr.area();
