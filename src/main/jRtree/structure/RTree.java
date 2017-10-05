@@ -136,6 +136,7 @@ public class RTree implements IDtoConvertible{
                     }
                     return possibleNewEntries;
                 }
+                return new ArrayList<NodeEntry>(0);
             } catch (IndexOutOfBoundsException exception){
                 /* Updating above MBR. */
                 newEntries.clear();
@@ -148,8 +149,6 @@ public class RTree implements IDtoConvertible{
             /* The MBR didn't have to increase. Just return an empty array again */
             return new ArrayList<NodeEntry>(0);
         }
-        System.err.println("retornando null");
-        return null;   /* Just to accomplish the signature*/
     }
 
     public Node getRoot() {
