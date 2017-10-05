@@ -38,7 +38,9 @@ public class SynthGen extends AbstractGen {
 	@Override
 	public double[] coords(double [] rd) {
 		// TODO Auto-generated method stub
-		return null;
+		rd[2] = rd[0]+rd[2];
+		rd[3] = rd[1]+rd[3];
+		return rd;
 	}
 
 	@Override
@@ -51,7 +53,7 @@ public class SynthGen extends AbstractGen {
 	public void writeFile() {
 		// TODO Auto-generated method stub
 		for(int i=0; i<N; i++) {
-			double [] d = genSingleRectangle();
+			double [] d = coords(genSingleRectangle());
 			try {
 
 				this.raf.writeChars(String.format("%f,%f,%f,%f\n", d[0], d[1], d[2], d[3]));
