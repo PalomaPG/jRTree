@@ -12,6 +12,5 @@ public abstract class AbstractGen {
 			this.N= (int)Math.pow(2,n);
 		}
 		public abstract void writeFile();
-		public abstract double[] coords(double [] rd); 
-		public abstract double[] coordLengthAndWidth();
+		public abstract int[] coords(int[] rd);
 }
