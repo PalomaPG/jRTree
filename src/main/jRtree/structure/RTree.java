@@ -1,7 +1,7 @@
 package structure;
 
 //import diskmanagement.DiskAccess;
-import dto.*;
+
 import exception.RTreeDiskAccessException;
 import exception.RTreeException;
 import utils.*;
@@ -10,7 +10,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class RTree implements IDtoConvertible{
+public class RTree{
 
     private int nodeSize;
     private NodeSplitter nodeSplitter;
@@ -174,9 +174,5 @@ public class RTree implements IDtoConvertible{
     private NodeEntry newUpdatedNodeEntry(INode childNode){
         MBR newMBR = nodeSplitter.calculateMBR(childNode.getData());
         return new NodeEntry(newMBR, childNode);
-    }
-
-    public TreeDTO toDTO() {
-        return new TreeDTO(Constants.PAGESIZE, rootPtr);
     }
 }

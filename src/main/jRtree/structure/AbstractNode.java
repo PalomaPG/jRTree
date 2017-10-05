@@ -1,10 +1,10 @@
 package structure;
 
-import dto.NodeDTO;
+
 
 import java.util.ArrayList;
 
-public abstract class AbstractNode extends NodeDTO implements INode{
+public abstract class AbstractNode implements INode{
     protected ArrayList<NodeEntry> data;
     protected NodeEntry parent;
     protected int parent_entry;
