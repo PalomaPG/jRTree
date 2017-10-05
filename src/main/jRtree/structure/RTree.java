@@ -1,17 +1,38 @@
 package structure;
 
+//import diskmanagement.DiskAccess;
+import dto.*;
+import exception.RTreeDiskAccessException;
+import exception.RTreeException;
+import utils.*;
+
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 
-public class RTree {
+public class RTree implements IDtoConvertible{
 
     private int nodeSize;
     private NodeSplitter nodeSplitter;
     private Node root;
+    private long rootPtr = -1;
+    private File saveFile;
+    //private DiskAccess diskAccess;
 
-    public RTree(int nodeSize, NodeSplitter nodeSplitter){
+
+    public RTree(int nodeSize, NodeSplitter nodeSplitter) throws RTreeException, RTreeDiskAccessException {
         this.nodeSize = nodeSize;
         this.nodeSplitter = nodeSplitter;
         this.root = new Node(nodeSize);
+        //this.diskAccess = new DiskAccess();
+        this.saveFile = new File(Constants.TREE_FILE);
+        if(!this.saveFile.exists()){
+            try {
+                this.saveFile.createNewFile();
+            }catch (IOException e){
+                throw new RTreeException("problema al crear archivo de arbol");
+            }
+        }
     }
 
     public NodeEntry getMinEnlargement(ArrayList<NodeEntry> neList){
@@ -127,6 +148,7 @@ public class RTree {
             /* The MBR didn't have to increase. Just return an empty array again */
             return new ArrayList<NodeEntry>(0);
         }
+        System.err.println("retornando null");
         return null;   /* Just to accomplish the signature*/
     }
 
@@ -153,5 +175,9 @@ public class RTree {
     private NodeEntry newUpdatedNodeEntry(INode childNode){
         MBR newMBR = nodeSplitter.calculateMBR(childNode.getData());
         return new NodeEntry(newMBR, childNode);
+    }
+
+    public TreeDTO toDTO() {
+        return new TreeDTO(Constants.PAGESIZE, rootPtr);
     }
 }

@@ -1,5 +1,7 @@
 package structure;
 
+import exception.RTreeDiskAccessException;
+import exception.RTreeException;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Rule;
@@ -7,9 +9,7 @@ import org.junit.rules.ExpectedException;
 import org.junit.Test;
 
 import static org.hamcrest.CoreMatchers.containsString;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.*;
 
 public class RTreeTest {
 
@@ -23,7 +23,13 @@ public class RTreeTest {
     public void setUp(){
         int nodeSize = 3;
         this.nodeSplitter = new LinearSplitter();
-        this.rt = new RTree(nodeSize, this.nodeSplitter);
+        try {
+            this.rt = new RTree(nodeSize, this.nodeSplitter);
+        } catch (RTreeException e) {
+            e.printStackTrace();
+        } catch (RTreeDiskAccessException e) {
+            e.printStackTrace();
+        }
         this.thrown = ExpectedException.none();
     }
 
