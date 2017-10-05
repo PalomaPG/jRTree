@@ -69,10 +69,11 @@ public class RTree {
                     newRoot(newEntries);
                 }
             } else { /* MBR was inserted. Should return an ArrayList with a NodeEntry with updated MBR. In overflow case
-             (above), the Splitter should be responsible of calculating new MBRs.
-             The containing MBR should always increase because inserted MBR isn't inside old ones */
+             (above), the Splitter should be responsible of calculating new MBRs.*/
                 newEntries = new ArrayList<NodeEntry>(1);
-                newEntries.add(newUpdatedNodeEntry(node));
+                if (reCalcMBR){
+                    newEntries.add(newUpdatedNodeEntry(node));
+                }
             }
             return newEntries;
         }
