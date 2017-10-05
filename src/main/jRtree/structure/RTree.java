@@ -45,11 +45,18 @@ public class RTree {
     }
 
     public void insert(MBR mbr){
-        realInsert(new NodeEntry(mbr, new NullNode()), this.root);
+        realInsert(new NodeEntry(mbr, new NullNode()), this.root, false);
     }
 
-    //public void insert(NodeEntry ne, INode node, ArrayList<NodeEntry>track){
-    private ArrayList<NodeEntry> realInsert(NodeEntry ne, INode node){
+
+    /**
+     *
+     * @param ne : NodeEntry to be inserted
+     * @param node : Where insertion begins
+     * @param reCalcMBR : Tells if the NodeEntry instance containing node should update it's MBR
+     * @return NodeEntry(s) to be inserted in node's parent. Doesn't apply for root.
+     */
+    private ArrayList<NodeEntry> realInsert(NodeEntry ne, INode node, boolean reCalcMBR){
         /* Base case leaf node */
         if (node.isLeaf()){
             boolean inserted = node.insert(ne);  // O(1)
@@ -85,7 +92,8 @@ public class RTree {
             }
         }
         NodeEntry minEnlargement = getMinEnlargement(candidates);
-        ArrayList<NodeEntry> newEntries = realInsert(ne, minEnlargement.getChild()); /* <- Recursive call 'ö' */
+        /* Recursive call 'ö' */
+        ArrayList<NodeEntry> newEntries = realInsert(ne, minEnlargement.getChild(), !(minAreaGrowth == 0) );
         if (!(newEntries.isEmpty())){
             /* Si entra aquí debe actualizarse este nodo con las nuevas entradas que vienen de abajo.
             No debería ser vacío nunca pues al menos devuelve un NodeEntry con el MBR actualizado hacia arriba.
@@ -99,20 +107,25 @@ public class RTree {
                     possibleNewEntries = nodeSplitter.split(newEntries.get(1), node);
                     possibleNewEntries.get(0).getChild().setIsLeaf(false);
                     possibleNewEntries.get(1).getChild().setIsLeaf(false);
-                    if (node.equals(this.root)){ /* Implementar este equals */
+                    if (node.equals(this.root)){
                         /* Se debe crear nueva raiz e insertar las nuevas entradas antes de retornar */
                         newRoot(possibleNewEntries);
                     }
                     return possibleNewEntries;
                 }
             } catch (IndexOutOfBoundsException exception){
-                /* Updating above MBR. Optional: Add a flag in realInsert to know if recalculating MBR is necessary */
+                /* Updating above MBR. */
                 newEntries.clear();
-                newEntries.add(newUpdatedNodeEntry(node));
-                return newEntries;
+                if (reCalcMBR){
+                    newEntries.add(newUpdatedNodeEntry(node));
+                }
+                return newEntries;  /* Could be empty */
             }
+        } else {
+            /* The MBR didn't have to increase. Just return an empty array again */
+            return new ArrayList<NodeEntry>(0);
         }
-        return null;  /* Just to accomplish the signature*/
+        return null;   /* Just to accomplish the signature*/
     }
 
     public Node getRoot() {
