@@ -1,6 +1,7 @@
 package genrect;
 
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.util.Random;
@@ -15,9 +16,8 @@ public class SynthGen extends AbstractGen {
 		this.N = (int)Math.pow(2, n);
 		this.filename = String.format(pwd+"/synthdata-N%d.csv", N);
 		try {
-			this.raf = new RandomAccessFile(filename, "rw");
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
+			this.fw = new FileWriter(this.filename);
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
@@ -52,12 +52,17 @@ public class SynthGen extends AbstractGen {
 			int [] d = coords(genSingleRectangle());
 			try {
 
-				this.raf.writeChars(String.format("%d,%d,%d,%d\n", d[0], d[1], d[2], d[3]));
+				this.fw.write(String.format("%d,%d,%d,%d\n", d[0], d[1], d[2], d[3]));
 				}
 			catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+		}
+		try {
+			this.fw.close();
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 	}
 	
