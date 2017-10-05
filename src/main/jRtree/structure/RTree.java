@@ -136,8 +136,9 @@ public class RTree{
                     }
                     return possibleNewEntries;
                 }
-                return new ArrayList<NodeEntry>(0);
             } catch (IndexOutOfBoundsException exception){
+
+            } finally {
                 /* Updating above MBR. */
                 newEntries.clear();
                 if (reCalcMBR){

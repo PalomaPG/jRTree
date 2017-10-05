@@ -20,6 +20,7 @@ public class Main {
 
 
         readData();
+        System.out.println("Done!!");
 
     }
 
@@ -41,7 +42,6 @@ public class Main {
 
                 MBR mbr = new MBR(new Coord2D(minX, minY), new Coord2D(maxX, maxY));
                 tree.insert(mbr);
-                //System.err.println(coords[0]);
             }
             br.close();
             reader.close();
