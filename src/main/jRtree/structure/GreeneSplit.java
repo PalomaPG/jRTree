@@ -1,25 +1,58 @@
 package structure;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class GreeneSplit extends DistanceBasedSplitter {
 
     public ArrayList<NodeEntry> split(NodeEntry ne, INode node) {
-        // Detect the dimension to work on
         ArrayList<NodeEntry> allNodeEntries = new ArrayList<NodeEntry>(node.getData());
         allNodeEntries.add(ne);
-        chooseFarthestMBRs(allNodeEntries);
-
-        return null;
+        chooseFarthestMBRs(allNodeEntries); // This set the variable axisOfLongestSeparation
+        orderByAxis(allNodeEntries);
+        // Nodes to allocate entries
+        int M = allNodeEntries.size() - 1;
+        INode node1 = new Node(M);
+        INode node2 = new Node(M);
+        int mid = (M+1)/2;
+        int i,j;
+        for (i=0; i<mid; i++){
+            node1.insert(allNodeEntries.get(i));
+        }
+        for (j=mid; j<2*mid; j++){
+            node2.insert(allNodeEntries.get(j));
+        }
+        // Create Node Entries
+        NodeEntry left = new NodeEntry(this.calculateMBR(node1.getData()), node1);
+        NodeEntry right = new NodeEntry(this.calculateMBR(node2.getData()), node2);
+        if ((M+1)%2 == 1){ // M+1 is odd
+            NodeEntry lastEntry = allNodeEntries.get(M);
+            double growth1 = left.calculateEnlargement(lastEntry);
+            double growth2 = right.calculateEnlargement(lastEntry);
+            if (growth1 < growth2){
+                node1.insert(lastEntry);
+            } else if (growth1 > growth2){
+                node2.insert(lastEntry);
+            } else {  // Get the smaller
+                if (left.getMBR().area() < right.getMBR().area()){
+                    node1.insert(lastEntry);
+                } else {
+                    node2.insert(lastEntry);
+                }
+            }
+        }
+        ArrayList<NodeEntry> newEntries = new ArrayList<NodeEntry>(2);
+        newEntries.add(left);
+        newEntries.add(right);
+        return newEntries;
     }
 
-    private void orderByAxis(ArrayList<NodeEntry> entries, int start, int end){
+    private void orderByAxis(ArrayList<NodeEntry> entries){
         if (axisOfLongestSeparation == 'X'){
-
+            Collections.sort(entries, NodeEntry.xAxisComparator());
         } else if (axisOfLongestSeparation == 'Y'){
-
+            Collections.sort(entries, NodeEntry.yAxisComparator());
         }
-
     }
 
 }

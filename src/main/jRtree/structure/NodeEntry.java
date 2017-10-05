@@ -1,5 +1,7 @@
 package structure;
 
+import java.util.Comparator;
+
 public class NodeEntry{
 
     private MBR mbr;
@@ -54,4 +56,25 @@ public class NodeEntry{
     public void setMbr(MBR mbr){
         this.mbr = mbr;
     }
+
+    public static Comparator<NodeEntry>  xAxisComparator(){
+        return new Comparator<NodeEntry>() {
+            public int compare(NodeEntry o1, NodeEntry o2) {
+                double x1 = o1.mbr.getLeftBottom().getX();
+                double x2 = o2.mbr.getLeftBottom().getX();
+                return Double.compare(x1,x2);
+            }
+        };
+    }
+
+    public static Comparator<NodeEntry> yAxisComparator(){
+        return new Comparator<NodeEntry>() {
+            public int compare(NodeEntry o1, NodeEntry o2) {
+                double y1 = o1.mbr.getLeftBottom().getY();
+                double y2 = o2.mbr.getLeftBottom().getY();
+                return Double.compare(y1,y2);
+            }
+        };
+    }
+
 }
