@@ -96,7 +96,8 @@ public class RTree {
         ArrayList<NodeEntry> newEntries = realInsert(ne, minEnlargement.getChild(), !(minAreaGrowth == 0) );
         if (!(newEntries.isEmpty())){
             /* Si entra aquí debe actualizarse este nodo con las nuevas entradas que vienen de abajo.
-            No debería ser vacío nunca pues al menos devuelve un NodeEntry con el MBR actualizado hacia arriba.
+            Puede devolder un NodeEntry con el MBR actualizado hacia arriba o dos si es que hay overflow. Vacío si es
+            q el MBR no necesita actualzación.
             Al menos una de las nuevas entradas debe reemplazar al NodeEntry apuntado por minEnlargement, el otro
             (si es que existe) debe insertarse y chequear si hay overflow */
             node.replace(minEnlargement, newEntries.get(0));
