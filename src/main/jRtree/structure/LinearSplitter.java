@@ -30,24 +30,25 @@ public class LinearSplitter extends DistanceBasedSplitter {
         int remainSpaceNode1 = M - 1;
         int remainSpaceNode2 = M - 1;
         final int minimumAllocated = (int) Math.floor(M*0.4);
-        for (NodeEntry toBeInserted : allNodeEntries){
+        NodeEntry toBeInserted;
+        while (!allNodeEntries.isEmpty()){
             // remainEntries = L and one of the nodes has cur size m-L, insert all remains in that node.
             if (remainEntries + node1.getCurSize() == minimumAllocated){
-                int currentIndex = allNodeEntries.indexOf(toBeInserted);
-                for (int i = currentIndex; i<allNodeEntries.size(); i++){
-                    node1.insert(allNodeEntries.get(i));
+                for (NodeEntry remainEntry : allNodeEntries){
+                    node1.insert(remainEntry);
                 }
                 ne1.setMbr(calculateMBR(node1.getData()));
                 break;
             } else if ((remainEntries + node2.getCurSize() == minimumAllocated)){
-                int currentIndex = allNodeEntries.indexOf(toBeInserted);
-                for (int i = currentIndex; i<allNodeEntries.size(); i++){
-                    node2.insert(allNodeEntries.get(i));
+                for (NodeEntry remainEntry : allNodeEntries){
+                    node2.insert(remainEntry);
                 }
                 ne2.setMbr(calculateMBR(node2.getData()));
                 break;
             }
-            // Insert allNodeEntries.get(current) in the node which requires min enlargement
+            // Insert the node entry in the node which requires min enlargement
+            int randomIndex = (int)Math.floor(Math.random()*remainEntries);
+            toBeInserted = allNodeEntries.remove(randomIndex);
             double minEnlargement1 = ne1.calculateEnlargement(toBeInserted);
             double minEnlargement2 = ne2.calculateEnlargement(toBeInserted);
             if (minEnlargement1 < minEnlargement2 && remainSpaceNode1 >= 1){
