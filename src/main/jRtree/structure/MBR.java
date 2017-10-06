@@ -1,5 +1,7 @@
 package structure;
 
+import java.io.Serializable;
+
 /**
  * structure.MBR implementation. Assumes 2D rectangles, doesn't make any check.
  *
@@ -11,7 +13,7 @@ package structure;
  */
 
 
-public class MBR {
+public class MBR implements Serializable{
 
     private Coord2D leftBottom;
     private Coord2D topRight;

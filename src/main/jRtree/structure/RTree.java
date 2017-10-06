@@ -8,15 +8,17 @@ import utils.*;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class RTree{
+public class RTree implements Serializable{
 
     private int nodeSize;
     private NodeSplitter nodeSplitter;
     private Node root;
     private long rootPtr = -1;
     private File saveFile;
+
     //private DiskAccess diskAccess;
 
 
@@ -175,5 +177,30 @@ public class RTree{
     private NodeEntry newUpdatedNodeEntry(INode childNode){
         MBR newMBR = nodeSplitter.calculateMBR(childNode.getData());
         return new NodeEntry(newMBR, childNode);
+    }
+
+    /*Corregir para que entregue tiempo de busqueda de un MBR*/
+    public float getST() {
+        return 0;
+    }
+
+    /*Entrega numero de nodos visitados, hay que corregir*/
+    public float getVisNodes() {
+        return 0;
+    }
+
+    /*Building time ... entrega tiempo de construccion (hasta ultima insercion)*/
+    public float getBT() {
+        return 0;
+    }
+
+    /*Espacio de memoria ocupada*/
+    public float getSpace() {
+        return 0;
+    }
+
+    /*Porcentaje de llenado de paginas*/
+    public float percentage(){
+        return 0;
     }
 }
