@@ -2,7 +2,9 @@ package structure;
 
 
 
-import java.io.Serializable;
+import utils.Constants;
+
+import java.io.*;
 import java.util.ArrayList;
 
 public abstract class AbstractNode extends IDSettings implements INode, Serializable{
@@ -26,6 +28,30 @@ public abstract class AbstractNode extends IDSettings implements INode, Serializ
         return parent.getNodeId();
     }
 
+    public void writeToDisk() {
+        try {
+            ObjectOutputStream out
+                    = new ObjectOutputStream(new FileOutputStream("b" + nodeID + ".node"));
+            out.writeObject(this);
+            out.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.exit(1);
+        }
+    }
 
+    /** Read from disk and return the node with the specified id. */
+    public static AbstractNode readFromDisk(long id) {
+        try {
+            ObjectInputStream in
+                    = new ObjectInputStream
+                    (new FileInputStream("b" + id + ".node"));
+            return (AbstractNode)(in.readObject());
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.exit(1);
+            return null;
+        }
+    }
 
 }
