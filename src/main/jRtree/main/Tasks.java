@@ -1,8 +1,12 @@
 package main;
 
+import exception.RTreeDiskAccessException;
+import exception.RTreeException;
 import structure.Coord2D;
 import structure.MBR;
+import structure.NodeSplitter;
 import structure.RTree;
+import utils.Constants;
 
 import java.io.*;
 
@@ -10,18 +14,28 @@ public class Tasks {
 
     protected String insertInPath,  searchInPath;
     protected FileWriter insertOutPath, searchOutPath;
+    protected RTree tree;
 
     public Tasks(String insertInPath, FileWriter insertOutPath,
-                 String searchInPath, FileWriter searchOutPath){
+                 String searchInPath, FileWriter searchOutPath,
+                 NodeSplitter splitter){
 
         this.insertInPath = insertInPath;
         this.insertOutPath = insertOutPath;
         this.searchInPath = searchInPath;
         this.searchOutPath = searchOutPath;
 
+        try {
+            this.tree = new RTree(Constants.CAPACITY, splitter);
+        } catch (RTreeException e) {
+            e.printStackTrace();
+        } catch (RTreeDiskAccessException e) {
+            e.printStackTrace();
+        }
+
     }
 
-    public void insertTask(RTree tree){
+    public void insertTask(){
 
         try {
             FileReader fr = new FileReader(insertInPath);
@@ -53,7 +67,7 @@ public class Tasks {
 
     }
 
-    public void searchTask(RTree tree){
+    public void searchTask(){
 
         try {
             FileReader fr = new FileReader(searchInPath);

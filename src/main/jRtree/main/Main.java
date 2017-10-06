@@ -3,10 +3,8 @@ package main;
 
 import exception.RTreeDiskAccessException;
 import exception.RTreeException;
-import structure.Coord2D;
-import structure.LinearSplitter;
-import structure.MBR;
-import structure.RTree;
+import structure.*;
+import utils.Constants;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -52,4 +50,17 @@ public class Main {
         }
 
     }
+
+    public static void execTasks(String path, NodeSplitter splitter){
+
+        String prefix = Constants.PREFIX;
+
+        for(int i =9; i<=25; i++){
+
+            //Tasks tasks = new Tasks(path+"/"+prefix+i+Constants.SUFFIX, );
+        }
+
+    }
+
+
 }
