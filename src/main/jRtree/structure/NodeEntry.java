@@ -45,4 +45,14 @@ public class NodeEntry extends IDSettings implements Serializable {
     public void setMbr(MBR mbr){
         this.mbr = mbr;
     }
+
+    public boolean equals(Object o){
+        if(o instanceof NodeEntry){
+
+            NodeEntry ne = (NodeEntry)o;
+            return this.mbr.equals(ne.mbr) && this.child_id==ne.child_id;
+
+        }
+        else return false;
+    }
 }
