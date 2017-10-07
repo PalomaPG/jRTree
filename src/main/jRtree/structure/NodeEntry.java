@@ -12,7 +12,6 @@ public class NodeEntry extends IDSettings implements Serializable {
     }
 
     public NodeEntry(MBR mbr, long n){
-        createID();
         this.mbr = mbr;
         this.child_id = n;
     }

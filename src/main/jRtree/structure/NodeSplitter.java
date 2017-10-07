@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public interface NodeSplitter {
 
-    ArrayList<NodeEntry> split(NodeEntry ne, INode node);
+    ArrayList<NodeEntry> split(NodeEntry ne, Node node);
 
     ArrayList<NodeEntry> chooseFarthestMBRs(ArrayList<NodeEntry> nodeEntries);
 

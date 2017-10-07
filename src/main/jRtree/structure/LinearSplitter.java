@@ -8,7 +8,7 @@ public class LinearSplitter implements NodeSplitter{
      * Should return two NodeEntries whose child members are references to the new nodes created from splitting
      * the input.
      */
-    public ArrayList<NodeEntry> split(NodeEntry ne, INode node){
+    public ArrayList<NodeEntry> split(NodeEntry ne, Node node){
         // Create set of all node entries
         ArrayList<NodeEntry> allNodeEntries = new ArrayList<NodeEntry>(node.getData());
         allNodeEntries.add(ne);
@@ -19,7 +19,9 @@ public class LinearSplitter implements NodeSplitter{
         // Create new nodes and add their first entries
         int M = node.getCapacity();
         Node node1 = new Node(M);
+        System.err.println(String.format("node id in linearSplitter, node1 %d", node1.nodeID));
         Node node2 = new Node(M);
+        System.err.println(String.format("node id in linearSplitter, node2 %d", node2.nodeID));
         node1.insert(farthest.get(0));
         node2.insert(farthest.get(1));
         // Create containers for those nodes
@@ -82,10 +84,13 @@ public class LinearSplitter implements NodeSplitter{
         }
         //Write nodes to disk
         node1.writeToDisk();
+        System.err.println("Nodo 1 despues de..."+node1.nodeID);
         node2.writeToDisk();
+        System.err.println("Nodo 2 despues de..."+node2.nodeID);
         ArrayList<NodeEntry> newEntries = new ArrayList<NodeEntry>(2);
         newEntries.add(ne1);
         newEntries.add(ne2);
+        node.deleteFile(node.getNodeId());
         return newEntries;
     }
 
@@ -154,16 +159,16 @@ public class LinearSplitter implements NodeSplitter{
      * for both x and y among MBRs in node entries.
      */
     public MBR calculateMBR(ArrayList<NodeEntry> nodeEntries){
-        double lowX = Double.MAX_VALUE;
-        double highX = -1 * Double.MIN_VALUE;
-        double lowY = Double.MAX_VALUE;
-        double highY = -1 * Double.MIN_VALUE;
+        int lowX = Integer.MAX_VALUE;
+        int highX = -1 * Integer.MIN_VALUE;
+        int lowY = Integer.MAX_VALUE;
+        int highY = -1 * Integer.MIN_VALUE;
         for (NodeEntry ne : nodeEntries){
             MBR mbr = ne.getMBR();
-            double mbrLowX = mbr.getLeftBottom().getX();
-            double mbrHighX = mbr.getTopRight().getX();
-            double mbrLowY = mbr.getLeftBottom().getY();
-            double mbrHighY = mbr.getTopRight().getY();
+            int mbrLowX = mbr.getLeftBottom().getX();
+            int mbrHighX = mbr.getTopRight().getX();
+            int mbrLowY = mbr.getLeftBottom().getY();
+            int mbrHighY = mbr.getTopRight().getY();
             lowX = lowX > mbrLowX ? mbrLowX : lowX;
             lowY = lowY > mbrLowY ? mbrLowY : lowY;
             highX = highX < mbrHighX ? mbrHighX : highX;

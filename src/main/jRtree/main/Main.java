@@ -33,10 +33,10 @@ public class Main {
             while((line=br.readLine())!=null) {
 
                 String[] coords = line.split(",");
-                double minX = Double.parseDouble(coords[0]);
-                double minY = Double.parseDouble(coords[1]);
-                double maxX = Double.parseDouble(coords[2]);
-                double maxY = Double.parseDouble(coords[3]);
+                int minX = Integer.parseInt(coords[0]);
+                int minY = Integer.parseInt(coords[1]);
+                int maxX = Integer.parseInt(coords[2]);
+                int maxY = Integer.parseInt(coords[3]);
 
                 MBR mbr = new MBR(new Coord2D(minX, minY), new Coord2D(maxX, maxY));
                 tree.insert(mbr);

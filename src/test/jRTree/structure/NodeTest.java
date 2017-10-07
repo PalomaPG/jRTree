@@ -53,9 +53,9 @@ public class NodeTest {
     @Test
     public void nodeSearchTest(){
         // arrange
-        MBR mbr1 = new MBR(new double[][] {{0,0},{0,0},{0,0},{0,0}});  /* Coordinates have no sense but aren't important
+        MBR mbr1 = new MBR(new int[][] {{0,0},{0,0},{0,0},{0,0}});  /* Coordinates have no sense but aren't important
                                                                           for this test */
-        MBR mbr2 = new MBR(new double[][] {{1,1},{0,1},{0,0},{1,0}});
+        MBR mbr2 = new MBR(new int[][] {{1,1},{0,1},{0,0},{1,0}});
         Node n = new Node(1);
         n.insert(new NodeEntry(mbr1, -1));  // insert should accept structure.NodeEntry and structure.MBR objects
         // act
@@ -73,8 +73,8 @@ public class NodeTest {
     @Test
     public void nodeDeleteTest(){
         // arrange
-        MBR mbr_1 = new MBR(new double[][] {{0,0},{0,0},{0,0},{0,0}});
-        MBR mbr_2 = new MBR(new double[][] {{0,0},{0,0},{0,0},{0,0}});
+        MBR mbr_1 = new MBR(new int[][] {{0,0},{0,0},{0,0},{0,0}});
+        MBR mbr_2 = new MBR(new int[][] {{0,0},{0,0},{0,0},{0,0}});
         NodeEntry ne = new NodeEntry(mbr_1, -1);
         INode n = new Node(3);
         // act

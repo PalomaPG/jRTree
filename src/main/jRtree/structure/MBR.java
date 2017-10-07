@@ -18,11 +18,11 @@ public class MBR implements Serializable{
     private Coord2D leftBottom;
     private Coord2D topRight;
 
-    public MBR(double[][] mbrCorners) {
+    public MBR(int[][] mbrCorners) {
         this(new Coord2D(mbrCorners[0]), new Coord2D(mbrCorners[1]));
     }
 
-    public MBR(double[] leftBottom, double[] topRight) {
+    public MBR(int[] leftBottom, int[] topRight) {
         this(new Coord2D(leftBottom), new Coord2D(topRight));
     }
 
@@ -77,11 +77,11 @@ public class MBR implements Serializable{
         Coord2D oPt2 = mbr.getLeftBottom();
         Coord2D oPt4 = mbr.getTopRight();
         // Is strictly at south-west or south but share axis Y or west but share axis X or are equals
-        boolean leastLB = (this.leftBottom.isAtSouth(oPt2) || this.leftBottom.getY().equals(oPt2.getY())) &&
-                (this.leftBottom.isAtWest(oPt2) || this.leftBottom.getX().equals(oPt2.getX()));
+        boolean leastLB = (this.leftBottom.isAtSouth(oPt2) || this.leftBottom.getY()==(oPt2.getY())) &&
+                (this.leftBottom.isAtWest(oPt2) || this.leftBottom.getX()==(oPt2.getX()));
         // Is strictly at north-east or north but share axis Y or east but share axis X or are equals
-        boolean mostTP = (this.topRight.isAtNorth(oPt4) || this.topRight.getY().equals(oPt4.getY())) &&
-                (this.topRight.isAtEast(oPt4) || this.topRight.getX().equals(oPt4.getX()));
+        boolean mostTP = (this.topRight.isAtNorth(oPt4) || this.topRight.getY()==(oPt4.getY())) &&
+                (this.topRight.isAtEast(oPt4) || this.topRight.getX()==(oPt4.getX()));
         return leastLB && mostTP;
     }
 

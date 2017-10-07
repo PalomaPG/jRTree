@@ -40,8 +40,8 @@ public class RTreeTest {
     @Test
     public void insertNotContainingMBRs(){
         // arrange
-        MBR mbr1 = new MBR(new Coord2D(.0, .0), new Coord2D(.5, .5));
-        MBR mbr2 = new MBR(new Coord2D(.3, .35), new Coord2D(.4, .8));
+        MBR mbr1 = new MBR(new Coord2D(0, 0), new Coord2D(1, 1));
+        MBR mbr2 = new MBR(new Coord2D(0, 0), new Coord2D(1, 1));
         // act
         this.rt.insert(mbr1);
         this.rt.insert(mbr2);
@@ -55,7 +55,7 @@ public class RTreeTest {
         // arrange
         MBR mbr1 = new MBR(new Coord2D(0,0), new Coord2D(1,1));
         MBR mbr2 = new MBR(new Coord2D(9,9), new Coord2D(10,10));
-        MBR mbr3 = new MBR(new Coord2D(1,1), new Coord2D(1.5,1.5));
+        MBR mbr3 = new MBR(new Coord2D(1,1), new Coord2D(2,2));
         MBR mbr4 = new MBR(new Coord2D(8,9), new Coord2D(9,10));
         // act
         rt.insert(mbr1);
@@ -73,8 +73,8 @@ public class RTreeTest {
     @Test
     public void insertContainingMBRs(){
         // arrange
-        MBR mbr1 = new MBR(new Coord2D(.0, .0), new Coord2D(1.0, 1.0));
-        MBR mbr2 = new MBR(new Coord2D(.2, .2), new Coord2D(.5, .5));
+        MBR mbr1 = new MBR(new Coord2D(0, 0), new Coord2D(1, 1));
+        MBR mbr2 = new MBR(new Coord2D(0, 0), new Coord2D(1, 1));
         //this.thrown.expect(InsertionError.class);
         this.thrown.expect(containsString("New structure.MBR collides with another inside a leaf"));
         // act
