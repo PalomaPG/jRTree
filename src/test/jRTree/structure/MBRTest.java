@@ -13,9 +13,9 @@ public class MBRTest {
 
     @Before
     public void MBRCreation(){
-        double[][] mbrCorners = {{-1,-1},{1,1}};  // Simple 2x2 rectangle in counterclockwise sense
-        double [] leftBottom = {-1,-1};
-        double [] topRight = {1,1};
+        int[][] mbrCorners = {{-1,-1},{1,1}};  // Simple 2x2 rectangle in counterclockwise sense
+        int [] leftBottom = {-1,-1};
+        int [] topRight = {1,1};
         mbr1 = new MBR(mbrCorners);  // structure.MBR using and array of points
         mbr2 = new MBR(leftBottom, topRight);  // structure.MBR(leftBottom, topRight) counterclockwise
         mbr3 = new MBR(new Coord2D(3,6), new Coord2D(5,20));
@@ -29,7 +29,7 @@ public class MBRTest {
         // arrange
         Coord2D leftBottom1 = new Coord2D(0,0);
         Coord2D topRight1 = new Coord2D(1,1);
-        Coord2D leftBottom2 = new Coord2D(0.5,0.5);
+        Coord2D leftBottom2 = new Coord2D(1,1);
         Coord2D topRight2 = new Coord2D(2,2);
         MBR mbr1 = new MBR(leftBottom1, topRight1);
         MBR mbr2 = new MBR(leftBottom2, topRight2);
@@ -42,7 +42,7 @@ public class MBRTest {
         // assert
         assertTrue(intersect1);
         assertTrue(intersect2);
-        assertFalse(intersect3);
+        assertTrue(intersect3);
     }
 
     @Test
@@ -63,7 +63,7 @@ public class MBRTest {
     @Test
     public void containmentTestSharingBottomSide(){
         // arrange
-        MBR contained = new MBR(new Coord2D(0.0,-1.0), new Coord2D(0.5,0.5));
+        MBR contained = new MBR(new Coord2D(0,-1), new Coord2D(1,1));
         // act and assert
         actAndAssertFotContainmentTests(contained, mbr1);
     }
@@ -71,7 +71,7 @@ public class MBRTest {
     @Test
     public void containmentTestSharingLeftSide(){
         // arrange
-        MBR contained = new MBR(new Coord2D(-1.0,0.0), new Coord2D(0.5,0.5));
+        MBR contained = new MBR(new Coord2D(-1,0), new Coord2D(1,1));
         // act and assert
         actAndAssertFotContainmentTests(contained, mbr1);
     }
@@ -79,7 +79,7 @@ public class MBRTest {
     @Test
     public void containmentTestSharingTopSide(){
         // arrange
-        MBR contained = new MBR(new Coord2D(0.0,0.0), new Coord2D(0.5,1));
+        MBR contained = new MBR(new Coord2D(0,0), new Coord2D(1,1));
         // act and assert
         actAndAssertFotContainmentTests(contained, mbr1);
     }
@@ -87,7 +87,7 @@ public class MBRTest {
     @Test
     public void containmentTestSharingRightSide(){
         // arrange
-        MBR contained = new MBR(new Coord2D(0.0,0.0), new Coord2D(1,0.5));
+        MBR contained = new MBR(new Coord2D(0,0), new Coord2D(1,1));
         // act and assert
         actAndAssertFotContainmentTests(contained, mbr1);
     }
@@ -95,7 +95,7 @@ public class MBRTest {
     @Test
     public void containmentTestFullyContained(){
         // arrange
-        MBR contained = new MBR(new Coord2D(0.0,0.0), new Coord2D(0.5,0.5));
+        MBR contained = new MBR(new Coord2D(0,0), new Coord2D(1,1));
         // act and assert
         actAndAssertFotContainmentTests(contained, mbr1);
     }

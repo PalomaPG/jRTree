@@ -12,9 +12,9 @@ public class Coord2DTest {
     @Test
     public void coordCreation(){
         // arrange
-        double x = 1.0;
-        double y = 0.5;
-        double[] pt = {1.0,0.5};
+        int x = 1;
+        int y = 0;
+        int[] pt = {1,0};
         // act
         Coord2D coord1 = new Coord2D(x,y);
         Coord2D coord2 = new Coord2D(pt);

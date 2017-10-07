@@ -1,18 +1,31 @@
 package structure;
 
+//import diskmanagement.DiskAccess;
+
+import exception.RTreeDiskAccessException;
+import exception.RTreeException;
+import utils.*;
+
+import java.io.*;
 import java.util.ArrayList;
 
-public class RTree {
+public class RTree implements Serializable{
 
     private int nodeSize;
     private NodeSplitter nodeSplitter;
     private Node root;
+    private long rootPtr;
 
-    public RTree(int nodeSize, NodeSplitter nodeSplitter){
+
+
+    public RTree(int nodeSize, NodeSplitter nodeSplitter) throws RTreeException, RTreeDiskAccessException {
         this.nodeSize = nodeSize;
         this.nodeSplitter = nodeSplitter;
         this.root = new Node(nodeSize);
+        rootPtr = this.root.getNodeId();
     }
+
+    public long getRootPtr(){ return rootPtr;}
 
     public NodeEntry getMinEnlargement(ArrayList<NodeEntry> neList){
         if(neList.size()==1){
@@ -45,7 +58,8 @@ public class RTree {
     }
 
     public void insert(MBR mbr){
-        realInsert(new NodeEntry(mbr, new NullNode()), this.root, false);
+
+        realInsert(new NodeEntry(mbr, -1), this.root, false);
     }
 
 
@@ -56,7 +70,7 @@ public class RTree {
      * @param reCalcMBR : Tells if the NodeEntry instance containing node should update it's MBR
      * @return NodeEntry(s) to be inserted in node's parent. Doesn't apply for root.
      */
-    private ArrayList<NodeEntry> realInsert(NodeEntry ne, INode node, boolean reCalcMBR){
+    private ArrayList<NodeEntry> realInsert(NodeEntry ne, Node node, boolean reCalcMBR){
         /* Base case leaf node */
         if (node.isLeaf()){
             boolean inserted = node.insert(ne);  // O(1)
@@ -94,7 +108,8 @@ public class RTree {
         }
         NodeEntry minEnlargement = getMinEnlargement(candidates);
         /* Recursive call 'ö' */
-        ArrayList<NodeEntry> newEntries = realInsert(ne, minEnlargement.getChild(), !(minAreaGrowth == 0) );
+        Node child = (Node)Node.readFromDisk(minEnlargement.getChild());
+        ArrayList<NodeEntry> newEntries = realInsert(ne, child, !(minAreaGrowth == 0) );
         if (!(newEntries.isEmpty())){
             /* Si entra aquí debe actualizarse este nodo con las nuevas entradas que vienen de abajo.
             Puede devolder un NodeEntry con el MBR actualizado hacia arriba o dos si es que hay overflow. Vacío si es
@@ -107,8 +122,12 @@ public class RTree {
                 boolean inserted = node.insert(newEntries.get(1));
                 if (!inserted){ /* Overflow */
                     possibleNewEntries = nodeSplitter.split(newEntries.get(1), node);
-                    possibleNewEntries.get(0).getChild().setIsLeaf(false);
-                    possibleNewEntries.get(1).getChild().setIsLeaf(false);
+                    Node child0 = (Node) Node.readFromDisk(possibleNewEntries.get(0).getChild());
+                    Node child1 = (Node) Node.readFromDisk(possibleNewEntries.get(1).getChild());
+                    child0.setIsLeaf(false);
+                    child1.setIsLeaf(false);
+                    child1.writeToDisk();
+                    child0.writeToDisk();
                     if (node.equals(this.root)){
                         /* Se debe crear nueva raiz e insertar las nuevas entradas antes de retornar */
                         newRoot(possibleNewEntries);
@@ -116,6 +135,8 @@ public class RTree {
                     return possibleNewEntries;
                 }
             } catch (IndexOutOfBoundsException exception){
+
+            } finally {
                 /* Updating above MBR. */
                 newEntries.clear();
                 if (reCalcMBR){
@@ -127,7 +148,6 @@ public class RTree {
             /* The MBR didn't have to increase. Just return an empty array again */
             return new ArrayList<NodeEntry>(0);
         }
-        return null;   /* Just to accomplish the signature*/
     }
 
     public Node getRoot() {
@@ -143,15 +163,57 @@ public class RTree {
     }
 
     private void newRoot(ArrayList<NodeEntry> newEntries){
+        this.root.deleteFile(rootPtr);
         this.root = new Node(this.nodeSize);
+        this.rootPtr = this.root.getNodeId();
         this.root.setIsLeaf(false);  /* <-- very important */
         for (NodeEntry nodeEntry : newEntries){  /* Optional: Create a insertAll method at Node class */
             this.root.insert(nodeEntry);
         }
     }
 
-    private NodeEntry newUpdatedNodeEntry(INode childNode){
+    private NodeEntry newUpdatedNodeEntry(Node childNode){
         MBR newMBR = nodeSplitter.calculateMBR(childNode.getData());
-        return new NodeEntry(newMBR, childNode);
+        return new NodeEntry(newMBR, childNode.getNodeId());
+    }
+
+
+    /** Write this BTree to disk. */
+    public void writeToDisk() {
+        try {
+            ObjectOutputStream out
+                    = new ObjectOutputStream
+                    (new FileOutputStream(Constants.TREE_DATA_DIRECTORY + "btree"));
+            out.writeObject(this);
+            out.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.exit(1);
+        }
+    }
+
+    /*Corregir para que entregue tiempo de busqueda de un MBR*/
+    public float getST() {
+        return 0;
+    }
+
+    /*Entrega numero de nodos visitados, hay que corregir*/
+    public float getVisNodes() {
+        return 0;
+    }
+
+    /*Building time ... entrega tiempo de construccion (hasta ultima insercion)*/
+    public float getBT() {
+        return 0;
+    }
+
+    /*Espacio de memoria ocupada*/
+    public float getSpace() {
+        return 0;
+    }
+
+    /*Porcentaje de llenado de paginas*/
+    public float percentage(){
+        return 0;
     }
 }

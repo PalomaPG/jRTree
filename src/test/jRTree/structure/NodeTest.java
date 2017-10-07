@@ -21,7 +21,7 @@ public class NodeTest {
         // arrange
         int capacity = 3;
         // act
-        INode n = new Node(capacity);
+        Node n = new Node(capacity);
         // assert
         assertEquals(capacity, n.getCapacity());
         assertEquals(0, n.getCurSize());
@@ -34,17 +34,17 @@ public class NodeTest {
     @Test
     public void nodeInsertTest(){
         // arrange
-        INode n = new Node(3);  // structure.Node with capacity of 3 node entries
+        Node n = new Node(3);  // structure.Node with capacity of 3 node entries
         NodeEntry ne1 = new NodeEntry();  // Empty constructor
-        NodeEntry ne2 = new NodeEntry(null, null);  // structure.NodeEntry(mbr, nodePtr or objectId)
-        NodeEntry ne3 = new NodeEntry(null, null);
+        NodeEntry ne2 = new NodeEntry(null, -1);  // structure.NodeEntry(mbr, nodePtr or objectId)
+        NodeEntry ne3 = new NodeEntry(null, -1);
         // act
         n.insert(ne1);
         n.insert(ne2);
         // assert
         assertTrue(n.insert(ne3));
         assertEquals(n.getCapacity(), n.getCurSize());
-        assertFalse(n.insert(new NodeEntry(null,null)));
+        assertFalse(n.insert(new NodeEntry(null,-1)));
     }
 
     /**
@@ -53,11 +53,11 @@ public class NodeTest {
     @Test
     public void nodeSearchTest(){
         // arrange
-        MBR mbr1 = new MBR(new double[][] {{0,0},{0,0},{0,0},{0,0}});  /* Coordinates have no sense but aren't important
+        MBR mbr1 = new MBR(new int[][] {{0,0},{0,0},{0,0},{0,0}});  /* Coordinates have no sense but aren't important
                                                                           for this test */
-        MBR mbr2 = new MBR(new double[][] {{1,1},{0,1},{0,0},{1,0}});
-        INode n = new Node(1);
-        n.insert(new NodeEntry(mbr1, null));  // insert should accept structure.NodeEntry and structure.MBR objects
+        MBR mbr2 = new MBR(new int[][] {{1,1},{0,1},{0,0},{1,0}});
+        Node n = new Node(1);
+        n.insert(new NodeEntry(mbr1, -1));  // insert should accept structure.NodeEntry and structure.MBR objects
         // act
         ArrayList<MBR> mbrArray1 = n.search(mbr1);  // Searching is always about data in a structure.NodeEntry
         ArrayList<MBR> mbrArray2 = n.search(mbr2);
@@ -73,9 +73,9 @@ public class NodeTest {
     @Test
     public void nodeDeleteTest(){
         // arrange
-        MBR mbr_1 = new MBR(new double[][] {{0,0},{0,0},{0,0},{0,0}});
-        MBR mbr_2 = new MBR(new double[][] {{0,0},{0,0},{0,0},{0,0}});
-        NodeEntry ne = new NodeEntry(mbr_1, null);
+        MBR mbr_1 = new MBR(new int[][] {{0,0},{0,0},{0,0},{0,0}});
+        MBR mbr_2 = new MBR(new int[][] {{0,0},{0,0},{0,0},{0,0}});
+        NodeEntry ne = new NodeEntry(mbr_1, -1);
         INode n = new Node(3);
         // act
         n.insert(ne);

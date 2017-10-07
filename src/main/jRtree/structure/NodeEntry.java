@@ -1,40 +1,31 @@
 package structure;
 
+import java.io.Serializable;
 import java.util.Comparator;
 
-public class NodeEntry{
+
+public class NodeEntry extends IDSettings implements Serializable {
 
     private MBR mbr;
-    private INode child;
-    //private INode host;
+    private long child_id;
 
     public NodeEntry(){
-        this(null,null);
+        this(null,-1);
     }
 
-    public NodeEntry(MBR mbr, INode n){
+    public NodeEntry(MBR mbr, long n){
         this.mbr = mbr;
-        this.child = n;
-        //this.host = null;
+        this.child_id = n;
     }
 
-    /*public NodeEntry(MBR mbr, INode n, INode host){
-        this.mbr = mbr;
-        this.child = n;
-        this.host = host;
-    }*/
 
     public MBR getMBR() {
         return mbr;
     }
-    public INode getChild(){
-        return child;
+    public long getChild(){
+        return child_id;
     }
-   /* public INode getHost(){ return host;}
-    public void setHost(INode in){
-        host = in;
-    }
-*/
+
 
     public double calculateEnlargement(NodeEntry ne){
         MBR neMBR = ne.getMBR();
@@ -57,7 +48,8 @@ public class NodeEntry{
         this.mbr = mbr;
     }
 
-    public static Comparator<NodeEntry>  xAxisComparator(){
+
+    public static Comparator<NodeEntry> xAxisComparator(){
         return new Comparator<NodeEntry>() {
             public int compare(NodeEntry o1, NodeEntry o2) {
                 double x1 = o1.mbr.getLeftBottom().getX();
@@ -75,6 +67,17 @@ public class NodeEntry{
                 return Double.compare(y1,y2);
             }
         };
+    }
+
+
+    public boolean equals(Object o){
+        if(o instanceof NodeEntry){
+
+            NodeEntry ne = (NodeEntry)o;
+            return this.mbr.equals(ne.mbr) && this.child_id==ne.child_id;
+
+        }
+        else return false;
     }
 
 }

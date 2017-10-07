@@ -6,7 +6,8 @@ public class DistanceBasedSplitter implements NodeSplitter {
 
     protected char axisOfLongestSeparation;
 
-    public ArrayList<NodeEntry> split(NodeEntry ne, INode node) {
+
+    public ArrayList<NodeEntry> split(NodeEntry ne, Node node) {
         return null;
     }
 
@@ -76,16 +77,16 @@ public class DistanceBasedSplitter implements NodeSplitter {
      * for both x and y among MBRs in node entries.
      */
     public MBR calculateMBR(ArrayList<NodeEntry> nodeEntries){
-        double lowX = Double.MAX_VALUE;
-        double highX = -1 * Double.MIN_VALUE;
-        double lowY = Double.MAX_VALUE;
-        double highY = -1 * Double.MIN_VALUE;
+        int lowX = Integer.MAX_VALUE;
+        int highX = -1 * Integer.MIN_VALUE;
+        int lowY = Integer.MAX_VALUE;
+        int highY = -1 * Integer.MIN_VALUE;
         for (NodeEntry ne : nodeEntries){
             MBR mbr = ne.getMBR();
-            double mbrLowX = mbr.getLeftBottom().getX();
-            double mbrHighX = mbr.getTopRight().getX();
-            double mbrLowY = mbr.getLeftBottom().getY();
-            double mbrHighY = mbr.getTopRight().getY();
+            int mbrLowX = mbr.getLeftBottom().getX();
+            int mbrHighX = mbr.getTopRight().getX();
+            int mbrLowY = mbr.getLeftBottom().getY();
+            int mbrHighY = mbr.getTopRight().getY();
             lowX = lowX > mbrLowX ? mbrLowX : lowX;
             lowY = lowY > mbrLowY ? mbrLowY : lowY;
             highX = highX < mbrHighX ? mbrHighX : highX;

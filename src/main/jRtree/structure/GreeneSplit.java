@@ -5,15 +5,15 @@ import java.util.Collections;
 
 public class GreeneSplit extends DistanceBasedSplitter {
 
-    public ArrayList<NodeEntry> split(NodeEntry ne, INode node) {
+    public ArrayList<NodeEntry> split(NodeEntry ne, Node node) {
         ArrayList<NodeEntry> allNodeEntries = new ArrayList<NodeEntry>(node.getData());
         allNodeEntries.add(ne);
         chooseFarthestMBRs(allNodeEntries); // This set the variable axisOfLongestSeparation
         orderByAxis(allNodeEntries);
         // Nodes to allocate entries
         int M = allNodeEntries.size() - 1;
-        INode node1 = new Node(M);
-        INode node2 = new Node(M);
+        Node node1 = new Node(M);
+        Node node2 = new Node(M);
         int mid = (M+1)/2;
         int i,j;
         for (i=0; i<mid; i++){
@@ -23,8 +23,8 @@ public class GreeneSplit extends DistanceBasedSplitter {
             node2.insert(allNodeEntries.get(j));
         }
         // Create Node Entries
-        NodeEntry left = new NodeEntry(this.calculateMBR(node1.getData()), node1);
-        NodeEntry right = new NodeEntry(this.calculateMBR(node2.getData()), node2);
+        NodeEntry left = new NodeEntry(this.calculateMBR(node1.getData()), node1.getNodeId());
+        NodeEntry right = new NodeEntry(this.calculateMBR(node2.getData()), node2.getNodeId());
         if ((M+1)%2 == 1){ // M+1 is odd
             NodeEntry lastEntry = allNodeEntries.get(M);
             double growth1 = left.calculateEnlargement(lastEntry);
@@ -42,6 +42,8 @@ public class GreeneSplit extends DistanceBasedSplitter {
             }
         }
         ArrayList<NodeEntry> newEntries = new ArrayList<NodeEntry>(2);
+        node1.writeToDisk();
+        node2.writeToDisk();
         newEntries.add(left);
         newEntries.add(right);
         return newEntries;

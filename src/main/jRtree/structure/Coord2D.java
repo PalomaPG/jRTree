@@ -1,25 +1,28 @@
 package structure;// Simple class to represent two-dimensional coordinates of real numbers
 
-public class Coord2D{
+import java.io.Serializable;
 
-    private Double x;
-    private Double y;
+public class Coord2D implements Serializable{
+    private static final long serialVersionUID = 1L;
 
-    public Coord2D(double x, double y){
-        this.x = new Double(x);
-        this.y = new Double(y);
+    private int x;
+    private int y;
+
+    public Coord2D(int x, int y){
+        this.x = x;
+        this.y = y;
     }
 
-    public Coord2D(double[] pt){
-        this.x = new Double(pt[0]);
-        this.y = new Double(pt[1]);
+    public Coord2D(int[] pt){
+        this.x = pt[0];
+        this.y = pt[1];
     }
 
-    public Double getX() {
+    public int getX() {
         return this.x;
     }
 
-    public Double getY() {
+    public int getY() {
         return this.y;
     }
 
@@ -27,7 +30,7 @@ public class Coord2D{
     public boolean equals(Object aCoord){
         if(aCoord instanceof Coord2D){
             Coord2D c = (Coord2D) aCoord;
-            return this.x.equals(c.getX()) && this.y.equals(c.getY());
+            return this.x == c.getX() && this.y == c.getY();
         }
         else {
             return false;

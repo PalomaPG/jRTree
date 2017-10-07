@@ -8,16 +8,10 @@ public class RealGen extends AbstractGen {
 
 	}
 
-	@Override
-	public double[] coords(double[] rd) {
-		// TODO Auto-generated method stub
-		return null;
+	public int[] coords(int[] rd) {
+		return new int[0];
 	}
 
-	@Override
-	public double[] coordLengthAndWidth() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+
 
 }
