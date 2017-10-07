@@ -1,5 +1,6 @@
 package structure;
 
+import java.io.*;
 import java.util.ArrayList;
 
 /**
@@ -7,9 +8,9 @@ import java.util.ArrayList;
  * M must be determined by the user (or automatically) to make a structure.Node fits in a memory page.
  */
 
-public class Node extends AbstractNode {
+public class Node extends AbstractNode implements Serializable{
 
-
+    private static final long serialVersionUID = 6717676594323462987L;
 
     public Node(int capacity){
         super();
@@ -93,6 +94,30 @@ public class Node extends AbstractNode {
         return data;
     }
 
+    public void writeToDisk() {
+        try {
+            ObjectOutputStream out
+                    = new ObjectOutputStream(new FileOutputStream("b" + nodeID + ".node"));
+            out.writeObject(this);
+            out.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.exit(1);
+        }
+    }
 
+    /** Read from disk and return the node with the specified id. */
+    public static Node readFromDisk(long id) {
+        try {
+            ObjectInputStream in
+                    = new ObjectInputStream
+                    (new FileInputStream("b" + id + ".node"));
+            return (Node)(in.readObject());
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.exit(1);
+            return null;
+        }
+    }
 
 }

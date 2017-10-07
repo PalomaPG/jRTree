@@ -57,8 +57,8 @@ public class LinearSplitTest {
         NodeEntry neLeft = splittedNodes.get(0);
         NodeEntry neRight = splittedNodes.get(1);
 
-        Node left = (Node) Node.readFromDisk(neLeft.getChild());
-        Node right = (Node) Node.readFromDisk(neRight.getChild());
+        Node left = Node.readFromDisk(neLeft.getChild());
+        Node right = Node.readFromDisk(neRight.getChild());
 
         // assert
         assertTrue(left.getData().containsAll(expectedNode1.getData()) ||
