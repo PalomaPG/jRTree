@@ -25,6 +25,8 @@ public class RTree implements Serializable{
         rootPtr = this.root.getNodeId();
     }
 
+    public long getRootPtr(){ return rootPtr;}
+
     public NodeEntry getMinEnlargement(ArrayList<NodeEntry> neList){
         if(neList.size()==1){
             return neList.remove(0);
@@ -161,7 +163,9 @@ public class RTree implements Serializable{
     }
 
     private void newRoot(ArrayList<NodeEntry> newEntries){
+        this.root.deleteFile(rootPtr);
         this.root = new Node(this.nodeSize);
+        this.rootPtr = this.root.getNodeId();
         this.root.setIsLeaf(false);  /* <-- very important */
         for (NodeEntry nodeEntry : newEntries){  /* Optional: Create a insertAll method at Node class */
             this.root.insert(nodeEntry);
