@@ -31,19 +31,6 @@ public class Node extends AbstractNode {
         return this.curSize;
     }
 
-/*    public boolean insert(NodeEntry ne){
-        data.add(ne);
-        ne.setHost(this);
-        curSize++;
-        if (curSize <=capacity) {
-            return true;
-        }
-        else {
-            overflow = true;
-            return false;
-        }
-
-    }*/
 
     public boolean insert(NodeEntry ne){
         if (curSize < capacity) {
@@ -71,7 +58,9 @@ public class Node extends AbstractNode {
             for (NodeEntry ne : this.data){
                 MBR tested = ne.getMBR();
                 if (tested.intersect(mbr)){
-                    matched.addAll(ne.getChild().search(mbr));
+                    Node child = (Node)readFromDisk(ne.getChild());
+                    this.writeToDisk();
+                    matched.addAll(child.search(mbr));
                 }
             }
         }
@@ -104,9 +93,6 @@ public class Node extends AbstractNode {
         return data;
     }
 
-    public NodeEntry getParent(){
-        return parent;
-    }
 
 
 }

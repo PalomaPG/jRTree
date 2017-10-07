@@ -18,13 +18,15 @@ public class LinearSplitter implements NodeSplitter{
         allNodeEntries.removeAll(farthest);
         // Create new nodes and add their first entries
         int M = node.getCapacity();
-        INode node1 = new Node(M);
-        INode node2 = new Node(M);
+        Node node1 = new Node(M);
+        Node node2 = new Node(M);
         node1.insert(farthest.get(0));
         node2.insert(farthest.get(1));
         // Create containers for those nodes
-        NodeEntry ne1 = new NodeEntry(farthest.get(0).getMBR(), node1);
-        NodeEntry ne2 = new NodeEntry(farthest.get(1).getMBR(), node2);
+        NodeEntry ne1 = new NodeEntry(farthest.get(0).getMBR(), node1.getNodeId());
+        NodeEntry ne2 = new NodeEntry(farthest.get(1).getMBR(), node2.getNodeId());
+
+
         // Control variables
         int remainEntries = allNodeEntries.size();
         int remainSpaceNode1 = M - 1;
@@ -50,24 +52,27 @@ public class LinearSplitter implements NodeSplitter{
             // Insert allNodeEntries.get(current) in the node which requires min enlargement
             double minEnlargement1 = ne1.calculateEnlargement(toBeInserted);
             double minEnlargement2 = ne2.calculateEnlargement(toBeInserted);
+            //Read from memory children of ne1, ne2
+            Node ne1_child =(Node)AbstractNode.readFromDisk(ne1.getChild());
+            Node ne2_child =(Node)AbstractNode.readFromDisk(ne2.getChild());
             if (minEnlargement1 < minEnlargement2 && remainSpaceNode1 >= 1){
-                ne1.getChild().insert(toBeInserted);
+                ne1_child.insert(toBeInserted);
                 remainSpaceNode1--;
                 // Should updates ne.mbr
                 ne1.setMbr(calculateMBR(node1.getData()));
             } else if (minEnlargement1 > minEnlargement2 && remainSpaceNode2 >= 1){
-                ne2.getChild().insert(toBeInserted);
+                ne2_child.insert(toBeInserted);
                 remainSpaceNode2--;
                 // Should updates ne.mbr
                 ne2.setMbr(calculateMBR(node2.getData()));
             } else if (minEnlargement1 == minEnlargement2){
                 if (ne1.getMBR().area() < ne2.getMBR().area() && remainSpaceNode1 >= 1){
-                    ne1.getChild().insert(toBeInserted);
+                    ne1_child.insert(toBeInserted);
                     remainSpaceNode1--;
                     // Should updates ne.mbr
                     ne1.setMbr(calculateMBR(node1.getData()));
                 } else {
-                    ne2.getChild().insert(toBeInserted);
+                    ne2_child.insert(toBeInserted);
                     remainSpaceNode2--;
                     // Should updates ne.mbr
                     ne2.setMbr(calculateMBR(node2.getData()));
@@ -75,6 +80,9 @@ public class LinearSplitter implements NodeSplitter{
             }
             remainEntries--;
         }
+        //Write nodes to disk
+        node1.writeToDisk();
+        node2.writeToDisk();
         ArrayList<NodeEntry> newEntries = new ArrayList<NodeEntry>(2);
         newEntries.add(ne1);
         newEntries.add(ne2);

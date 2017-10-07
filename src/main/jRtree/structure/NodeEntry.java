@@ -5,25 +5,24 @@ import java.io.Serializable;
 public class NodeEntry extends IDSettings implements Serializable {
 
     private MBR mbr;
-    private INode child;
+    private long child_id;
 
     public NodeEntry(){
-        this(null,null);
+        this(null,-1);
     }
 
-    public NodeEntry(MBR mbr, INode n){
+    public NodeEntry(MBR mbr, long n){
         createID();
         this.mbr = mbr;
-        this.child = n;
-        //this.host = null;
+        this.child_id = n;
     }
 
 
     public MBR getMBR() {
         return mbr;
     }
-    public INode getChild(){
-        return child;
+    public long getChild(){
+        return child_id;
     }
 
 

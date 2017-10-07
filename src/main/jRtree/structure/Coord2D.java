@@ -1,6 +1,9 @@
 package structure;// Simple class to represent two-dimensional coordinates of real numbers
 
-public class Coord2D{
+import java.io.Serializable;
+
+public class Coord2D implements Serializable{
+    private static final long serialVersionUID = 1L;
 
     private Double x;
     private Double y;

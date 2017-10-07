@@ -6,9 +6,7 @@ import exception.RTreeDiskAccessException;
 import exception.RTreeException;
 import utils.*;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.Serializable;
+import java.io.*;
 import java.util.ArrayList;
 
 public class RTree implements Serializable{
@@ -16,25 +14,15 @@ public class RTree implements Serializable{
     private int nodeSize;
     private NodeSplitter nodeSplitter;
     private Node root;
-    private long rootPtr = -1;
-    private File saveFile;
+    private long rootPtr;
 
-    //private DiskAccess diskAccess;
 
 
     public RTree(int nodeSize, NodeSplitter nodeSplitter) throws RTreeException, RTreeDiskAccessException {
         this.nodeSize = nodeSize;
         this.nodeSplitter = nodeSplitter;
         this.root = new Node(nodeSize);
-        //this.diskAccess = new DiskAccess();
-        this.saveFile = new File(Constants.TREE_FILE);
-        if(!this.saveFile.exists()){
-            try {
-                this.saveFile.createNewFile();
-            }catch (IOException e){
-                throw new RTreeException("problema al crear archivo de arbol");
-            }
-        }
+        rootPtr = this.root.getNodeId();
     }
 
     public NodeEntry getMinEnlargement(ArrayList<NodeEntry> neList){
@@ -68,7 +56,8 @@ public class RTree implements Serializable{
     }
 
     public void insert(MBR mbr){
-        realInsert(new NodeEntry(mbr, new NullNode()), this.root, false);
+
+        realInsert(new NodeEntry(mbr, -1), this.root, false);
     }
 
 
@@ -79,7 +68,7 @@ public class RTree implements Serializable{
      * @param reCalcMBR : Tells if the NodeEntry instance containing node should update it's MBR
      * @return NodeEntry(s) to be inserted in node's parent. Doesn't apply for root.
      */
-    private ArrayList<NodeEntry> realInsert(NodeEntry ne, INode node, boolean reCalcMBR){
+    private ArrayList<NodeEntry> realInsert(NodeEntry ne, Node node, boolean reCalcMBR){
         /* Base case leaf node */
         if (node.isLeaf()){
             boolean inserted = node.insert(ne);  // O(1)
@@ -117,7 +106,8 @@ public class RTree implements Serializable{
         }
         NodeEntry minEnlargement = getMinEnlargement(candidates);
         /* Recursive call 'ö' */
-        ArrayList<NodeEntry> newEntries = realInsert(ne, minEnlargement.getChild(), !(minAreaGrowth == 0) );
+        Node child = (Node)Node.readFromDisk(minEnlargement.getChild());
+        ArrayList<NodeEntry> newEntries = realInsert(ne, child, !(minAreaGrowth == 0) );
         if (!(newEntries.isEmpty())){
             /* Si entra aquí debe actualizarse este nodo con las nuevas entradas que vienen de abajo.
             Puede devolder un NodeEntry con el MBR actualizado hacia arriba o dos si es que hay overflow. Vacío si es
@@ -130,8 +120,12 @@ public class RTree implements Serializable{
                 boolean inserted = node.insert(newEntries.get(1));
                 if (!inserted){ /* Overflow */
                     possibleNewEntries = nodeSplitter.split(newEntries.get(1), node);
-                    possibleNewEntries.get(0).getChild().setIsLeaf(false);
-                    possibleNewEntries.get(1).getChild().setIsLeaf(false);
+                    Node child0 = (Node) Node.readFromDisk(possibleNewEntries.get(0).getChild());
+                    Node child1 = (Node) Node.readFromDisk(possibleNewEntries.get(1).getChild());
+                    child0.setIsLeaf(false);
+                    child1.setIsLeaf(false);
+                    child1.writeToDisk();
+                    child0.writeToDisk();
                     if (node.equals(this.root)){
                         /* Se debe crear nueva raiz e insertar las nuevas entradas antes de retornar */
                         newRoot(possibleNewEntries);
@@ -174,9 +168,24 @@ public class RTree implements Serializable{
         }
     }
 
-    private NodeEntry newUpdatedNodeEntry(INode childNode){
+    private NodeEntry newUpdatedNodeEntry(Node childNode){
         MBR newMBR = nodeSplitter.calculateMBR(childNode.getData());
-        return new NodeEntry(newMBR, childNode);
+        return new NodeEntry(newMBR, childNode.getNodeId());
+    }
+
+
+    /** Write this BTree to disk. */
+    public void writeToDisk() {
+        try {
+            ObjectOutputStream out
+                    = new ObjectOutputStream
+                    (new FileOutputStream(Constants.TREE_DATA_DIRECTORY + "btree"));
+            out.writeObject(this);
+            out.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.exit(1);
+        }
     }
 
     /*Corregir para que entregue tiempo de busqueda de un MBR*/

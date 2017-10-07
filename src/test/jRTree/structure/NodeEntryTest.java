@@ -24,9 +24,9 @@ public class NodeEntryTest{
         /* INode MBR: (0.0, 0.0), (15,15)*/
         MBR contMBR = new MBR(new Coord2D(0, 0), new Coord2D(15,15));
 
-        container = new NodeEntry(contMBR, new NullNode());
-        ne1 = new NodeEntry(mbr1,  new NullNode());
-        ne2 = new NodeEntry(mbr2,  new NullNode());
+        container = new NodeEntry(contMBR, -1);
+        ne1 = new NodeEntry(mbr1,  -1);
+        ne2 = new NodeEntry(mbr2,  -1);
     }
 
     /**

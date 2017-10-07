@@ -37,7 +37,7 @@ public class DiskAccessTest {
         Node node = new Node(3);
         long id = node.getNodeId();
         node.writeToDisk();
-        Node n = (Node)AbstractNode.readFromDisk(node.getNodeId());
+        Node n = (Node)Node.readFromDisk(node.getNodeId());
         Assert.assertEquals(id, n.getNodeId());
     }
 }

@@ -17,10 +17,10 @@ public class LinearSplitTest {
     @Before
     public void setUp(){
         this.ls = new LinearSplitter();
-        ne1 = new NodeEntry(new MBR(new Coord2D(0,0), new Coord2D(1,1)), new NullNode());
-        ne2 = new NodeEntry(new MBR(new Coord2D(9,9), new Coord2D(10,10)), new NullNode());
-        ne3 = new NodeEntry(new MBR(new Coord2D(1,1), new Coord2D(1.5,1.5)), new NullNode());
-        ne4 = new NodeEntry(new MBR(new Coord2D(8,9), new Coord2D(9,10)), new NullNode());
+        ne1 = new NodeEntry(new MBR(new Coord2D(0,0), new Coord2D(1,1)), -1);
+        ne2 = new NodeEntry(new MBR(new Coord2D(9,9), new Coord2D(10,10)), -1);
+        ne3 = new NodeEntry(new MBR(new Coord2D(1,1), new Coord2D(1.5,1.5)), -1);
+        ne4 = new NodeEntry(new MBR(new Coord2D(8,9), new Coord2D(9,10)), -1);
     }
 
     @Test
@@ -46,8 +46,8 @@ public class LinearSplitTest {
         node.insert(ne1);
         node.insert(ne2);
         node.insert(ne3);
-        INode expectedNode1 = new Node(3);
-        INode expectedNode2 = new Node(3);
+        Node expectedNode1 = new Node(3);
+        Node expectedNode2 = new Node(3);
         expectedNode1.insert(ne1);
         expectedNode1.insert(ne3);
         expectedNode2.insert(ne2);
@@ -56,8 +56,9 @@ public class LinearSplitTest {
         ArrayList<NodeEntry> splittedNodes = ls.split(ne4, node);
         NodeEntry neLeft = splittedNodes.get(0);
         NodeEntry neRight = splittedNodes.get(1);
-        INode left = neLeft.getChild();
-        INode right = neRight.getChild();
+
+        Node left = (Node) Node.readFromDisk(neLeft.getChild());
+        Node right = (Node) Node.readFromDisk(neRight.getChild());
 
         // assert
         assertTrue(left.getData().containsAll(expectedNode1.getData()) ||
