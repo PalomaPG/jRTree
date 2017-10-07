@@ -1,3 +1,6 @@
 .idea/
 target/
 synthdata*
+*.node
+output/
+*.txt
