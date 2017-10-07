@@ -8,6 +8,8 @@ import org.junit.Before;
 import org.junit.Test;
 import structure.*;
 
+import java.util.ArrayList;
+
 public class DiskAccessTest {
 
 
@@ -56,12 +58,22 @@ public class DiskAccessTest {
         rtree.insert(R4);
         rtree.insert(R5);
         Assert.assertFalse(rootIdx== rtree.getRootPtr());
+        System.err.println("Buscar.....");
+        /*buscar*/
+        ArrayList<MBR> mbrs = rtree.search(R6);
+        for(MBR mbr : mbrs){
+            System.err.println(mbr.getLeftBottom().getX()+" "+mbr.getLeftBottom().getY());
+        }
+        mbrs = rtree.search(R5);
+        for(MBR mbr : mbrs){
+            System.err.println(mbr.getLeftBottom().getX()+" "+mbr.getLeftBottom().getY());
+        }
 
     }
 
 
     @Test
-    public void idsTest(){
+    public void search(){
         /*Tanto NodeEntries como Nodes tienen su propio id, y deben ser diferentes*/
 
     }

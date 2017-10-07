@@ -90,7 +90,7 @@ public class LinearSplitter implements NodeSplitter{
         ArrayList<NodeEntry> newEntries = new ArrayList<NodeEntry>(2);
         newEntries.add(ne1);
         newEntries.add(ne2);
-        node.deleteFile(node.getNodeId());
+        //node.deleteFile(node.getNodeId());
         return newEntries;
     }
 
