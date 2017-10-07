@@ -72,11 +72,7 @@ public class DiskAccessTest {
     }
 
 
-    @Test
-    public void search(){
-        /*Tanto NodeEntries como Nodes tienen su propio id, y deben ser diferentes*/
 
-    }
     @Test
     public void createNode2(){
 
