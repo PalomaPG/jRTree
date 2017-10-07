@@ -1,14 +1,14 @@
-package jRTree.structure;
+package structure;
 
 import exception.RTreeDiskAccessException;
 import exception.RTreeException;
-import org.junit.After;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import structure.*;
 
 import java.util.ArrayList;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 
 public class DiskAccessTest {
 
@@ -39,7 +39,7 @@ public class DiskAccessTest {
         node.writeToDisk();
         Node n = Node.readFromDisk(id);
         // assert
-        Assert.assertEquals(nodeEntry, n.getData().get(0));
+        assertEquals(nodeEntry, n.getData().get(0));
     }
 
     /*Debe crear el arbol y generar RAF*/
@@ -48,16 +48,16 @@ public class DiskAccessTest {
         rtree = new RTree(2, new LinearSplitter());
         long rootIdx = rtree.getRootPtr();
         rtree.insert(R1);
-        Assert.assertEquals(rootIdx, rtree.getRootPtr());
+        assertEquals(rootIdx, rtree.getRootPtr());
         rtree.insert(R2);
-        Assert.assertEquals(rootIdx, rtree.getRootPtr());
-        Assert.assertEquals(rtree.getRoot().getCurSize(), 2);
+        assertEquals(rootIdx, rtree.getRootPtr());
+        assertEquals(rtree.getRoot().getCurSize(), 2);
         rtree.insert(R3);
-        Assert.assertFalse(rootIdx== rtree.getRootPtr());
+        assertFalse(rootIdx== rtree.getRootPtr());
         rootIdx = rtree.getRootPtr();
         rtree.insert(R4);
         rtree.insert(R5);
-        Assert.assertFalse(rootIdx== rtree.getRootPtr());
+        assertFalse(rootIdx== rtree.getRootPtr());
         System.err.println("Buscar.....");
         /*buscar*/
         ArrayList<MBR> mbrs = rtree.search(R6);
@@ -71,8 +71,6 @@ public class DiskAccessTest {
 
     }
 
-
-
     @Test
     public void createNode2(){
 
@@ -81,6 +79,6 @@ public class DiskAccessTest {
         long id = node.getNodeId();
         node.writeToDisk();
         Node n = (Node)Node.readFromDisk(node.getNodeId());
-        Assert.assertEquals(id, n.getNodeId());
+        assertEquals(id, n.getNodeId());
     }
 }
