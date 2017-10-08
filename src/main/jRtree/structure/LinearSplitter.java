@@ -1,5 +1,7 @@
 package structure;
 
+import utils.Constants;
+
 import java.util.ArrayList;
 
 public class LinearSplitter extends DistanceBasedSplitter {
@@ -34,7 +36,7 @@ public class LinearSplitter extends DistanceBasedSplitter {
         int remainEntries = allNodeEntries.size();
         int remainSpaceNode1 = M - 1;
         int remainSpaceNode2 = M - 1;
-        final int minimumAllocated = (int) Math.floor(M*0.4);
+        final int minimumAllocated = (int) Math.floor(Constants.MINIMUM_ALLOCATION);
         NodeEntry toBeInserted;
         while (!allNodeEntries.isEmpty()){
             // remainEntries = L and one of the nodes has cur size m-L, insert all remains in that node.
@@ -57,8 +59,6 @@ public class LinearSplitter extends DistanceBasedSplitter {
             double minEnlargement1 = ne1.calculateEnlargement(toBeInserted);
             double minEnlargement2 = ne2.calculateEnlargement(toBeInserted);
             //Read from memory children of ne1, ne2
-            //Node ne1_child =Node.readFromDisk(ne1.getChild());
-            //Node ne2_child =Node.readFromDisk(ne2.getChild());
             if (minEnlargement1 < minEnlargement2 && remainSpaceNode1 >= 1){
                 node1.insert(toBeInserted);
                 remainSpaceNode1--;
@@ -92,89 +92,7 @@ public class LinearSplitter extends DistanceBasedSplitter {
         ArrayList<NodeEntry> newEntries = new ArrayList<NodeEntry>(2);
         newEntries.add(ne1);
         newEntries.add(ne2);
-        //node.deleteFile(node.getNodeId());
         return newEntries;
     }
 
-    public ArrayList<NodeEntry> chooseFarthestMBRs(ArrayList<NodeEntry> nodeEntries){
-        // First we need to find new MBR for entries in order to normalize i.e. width and height
-        MBR tempMBR = calculateMBR(nodeEntries);
-        double xLength = tempMBR.width();
-        double yLength = tempMBR.height();
-
-        NodeEntry xLower = null;
-        NodeEntry xHighest = null;
-        NodeEntry yLower = null;
-        NodeEntry yHighest = null;
-        // Records x distance between bottom x side tempMBR and the rectangle with lowest high side.
-        // Should be minimum possible. And the same for other sides
-        double xDistanceDown = xLength;
-        double xDistanceUp = xLength;
-        double yDistanceDown = yLength;
-        double yDistanceUp = yLength;
-        final double xTop = tempMBR.getTopRight().getX();
-        final double xDown = tempMBR.getLeftBottom().getX();
-        final double yTop = tempMBR.getTopRight().getY();
-        final double yDown = tempMBR.getLeftBottom().getY();
-        for (NodeEntry nodeEntry : nodeEntries){
-            MBR currentMBR = nodeEntry.getMBR();
-            double curXTop = currentMBR.getTopRight().getX();
-            double curXDown = currentMBR.getLeftBottom().getX();
-            double curYTop = currentMBR.getTopRight().getY();
-            double curYDown = currentMBR.getLeftBottom().getY();
-            if (curXTop - xDown < xDistanceDown){
-                xDistanceDown = curXTop - xDown;
-                xLower = nodeEntry;
-            }
-            if (xTop - curXDown < xDistanceUp){
-                xDistanceUp = xTop - curXDown;
-                xHighest = nodeEntry;
-            }
-            if (curYTop - yDown < yDistanceDown){
-                yDistanceDown = curYTop - yDown;
-                yLower = nodeEntry;
-            }
-            if (yTop - curYDown < yDistanceUp){
-                yDistanceUp = yTop - curYDown;
-                yHighest = nodeEntry;
-            }
-        }
-        // Check which dimension have the farthest rectangles
-        // Normalized distances
-        final double normXDistance = (xLength - (xDistanceUp + xDistanceDown))/xLength;
-        final double normYDistance = (yLength - (yDistanceUp + yDistanceDown))/yLength;
-        ArrayList<NodeEntry> farthest = new ArrayList<NodeEntry>(2);
-        // We need to compare distances and check we have different rectangles
-        if(normXDistance > normYDistance && !xLower.getMBR().equals(xHighest.getMBR())){
-            farthest.add(xLower);
-            farthest.add(xHighest);
-        } else {
-            farthest.add(yLower);
-            farthest.add(yHighest);
-        }
-        return farthest;
-    }
-
-    /**
-     * The MBR for a set of node entries is defined by finding the lower and higher
-     * for both x and y among MBRs in node entries.
-     */
-    public MBR calculateMBR(ArrayList<NodeEntry> nodeEntries){
-        int lowX = Integer.MAX_VALUE;
-        int highX = -1 * Integer.MIN_VALUE;
-        int lowY = Integer.MAX_VALUE;
-        int highY = -1 * Integer.MIN_VALUE;
-        for (NodeEntry ne : nodeEntries){
-            MBR mbr = ne.getMBR();
-            int mbrLowX = mbr.getLeftBottom().getX();
-            int mbrHighX = mbr.getTopRight().getX();
-            int mbrLowY = mbr.getLeftBottom().getY();
-            int mbrHighY = mbr.getTopRight().getY();
-            lowX = lowX > mbrLowX ? mbrLowX : lowX;
-            lowY = lowY > mbrLowY ? mbrLowY : lowY;
-            highX = highX < mbrHighX ? mbrHighX : highX;
-            highY = highY < mbrHighY ? mbrHighY : highY;
-        }
-        return new MBR(new Coord2D(lowX, lowY), new Coord2D(highX, highY));
-    }
 }

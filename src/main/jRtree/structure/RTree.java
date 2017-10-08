@@ -17,7 +17,6 @@ public class RTree implements Serializable{
     private long rootPtr;
 
 
-
     public RTree(int nodeSize, NodeSplitter nodeSplitter) throws RTreeException, RTreeDiskAccessException {
         this.nodeSize = nodeSize;
         this.nodeSplitter = nodeSplitter;
@@ -122,8 +121,8 @@ public class RTree implements Serializable{
                 boolean inserted = node.insert(newEntries.get(1));
                 if (!inserted){ /* Overflow */
                     possibleNewEntries = nodeSplitter.split(newEntries.get(1), node);
-                    Node child0 = (Node) Node.readFromDisk(possibleNewEntries.get(0).getChild());
-                    Node child1 = (Node) Node.readFromDisk(possibleNewEntries.get(1).getChild());
+                    Node child0 = Node.readFromDisk(possibleNewEntries.get(0).getChild());
+                    Node child1 = Node.readFromDisk(possibleNewEntries.get(1).getChild());
                     child0.setIsLeaf(false);
                     child1.setIsLeaf(false);
                     child1.writeToDisk();
@@ -154,9 +153,6 @@ public class RTree implements Serializable{
         return root;
     }
 
-    public void setRoot(Node root) {
-        this.root=root;
-    }
 
     public ArrayList<MBR> search(MBR mbr){
         return this.root.search(mbr);
@@ -190,30 +186,5 @@ public class RTree implements Serializable{
             e.printStackTrace();
             System.exit(1);
         }
-    }
-
-    /*Corregir para que entregue tiempo de busqueda de un MBR*/
-    public float getST() {
-        return 0;
-    }
-
-    /*Entrega numero de nodos visitados, hay que corregir*/
-    public float getVisNodes() {
-        return 0;
-    }
-
-    /*Building time ... entrega tiempo de construccion (hasta ultima insercion)*/
-    public float getBT() {
-        return 0;
-    }
-
-    /*Espacio de memoria ocupada*/
-    public float getSpace() {
-        return 0;
-    }
-
-    /*Porcentaje de llenado de paginas*/
-    public float percentage(){
-        return 0;
     }
 }

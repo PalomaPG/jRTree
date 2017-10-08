@@ -19,13 +19,6 @@ public class Node extends AbstractNode implements Serializable{
         this.capacity = capacity;
     }
 
-    public Node(int capacity, NodeEntry parent){
-        super();
-        this.capacity = capacity;
-        this.parent = parent;
-    }
-
-
     public int getCapacity() {
         return this.capacity;
     }

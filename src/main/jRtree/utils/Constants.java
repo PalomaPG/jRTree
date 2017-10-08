@@ -9,5 +9,6 @@ public class Constants {
     public static String PREFIX = "synthdata-N";
     public static String SUFFIX = ".csv";
     public static int CAPACITY = 10;
+    public static int MINIMUM_ALLOCATION = (int)(CAPACITY*0.4);
 
 }

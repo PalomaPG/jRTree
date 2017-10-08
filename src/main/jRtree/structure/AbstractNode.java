@@ -2,7 +2,6 @@ package structure;
 
 
 
-import utils.Constants;
 import utils.Utils;
 
 import java.io.*;
@@ -12,7 +11,6 @@ public abstract class AbstractNode extends IDSettings implements INode, Serializ
 
 
     protected ArrayList<NodeEntry> data;
-    protected NodeEntry parent;
     protected long nodeID;
 
     protected boolean isLeaf = false;
@@ -24,7 +22,6 @@ public abstract class AbstractNode extends IDSettings implements INode, Serializ
         this.curSize = 0;
         this.data = new ArrayList<NodeEntry>(capacity);
         this.isLeaf = true; // By default to make tests pass
-        parent = null;
     }
 
     public long getNodeId() {
