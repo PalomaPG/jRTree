@@ -102,6 +102,7 @@ public class RTree implements Serializable{
             if(minAreaGrowth > areaGrowth){
                 candidates.clear();
                 candidates.add(entry);
+                minAreaGrowth = areaGrowth;
             } else if(minAreaGrowth==areaGrowth){
                 /* Multiple entries have to grow the same and are minimum at this moment*/
                 candidates.add(entry);
@@ -131,14 +132,11 @@ public class RTree implements Serializable{
                     child0.writeToDisk();
                     if (node.equals(this.root)){
                         /* Se debe crear nueva raiz e insertar las nuevas entradas antes de retornar */
-                        node.deleteFile(node.getNodeId());
                         newRoot(possibleNewEntries);
-                        this.root.writeToDisk();
-                    } else {
-                        // El nodo hizo overflow y ya no debe existir. Es reemplazado por child0 y child1
-                        node.deleteFile(node.getNodeId());
                     }
                     return possibleNewEntries;
+                } else {
+                    node.writeToDisk();
                 }
             } catch (IndexOutOfBoundsException exception){
                 // Hay q actualizar el nodo en memoria secundaria
@@ -167,13 +165,14 @@ public class RTree implements Serializable{
     }
 
     private void newRoot(ArrayList<NodeEntry> newEntries){
-        this.root.deleteFile(rootPtr);
+        //this.root.deleteFile(rootPtr);
         this.root = new Node(this.nodeSize);
         this.rootPtr = this.root.getNodeId();
         this.root.setIsLeaf(false);  /* <-- very important */
         for (NodeEntry nodeEntry : newEntries){  /* Optional: Create a insertAll method at Node class */
             this.root.insert(nodeEntry);
         }
+        this.root.writeToDisk();
     }
 
     private NodeEntry newUpdatedNodeEntry(Node childNode){

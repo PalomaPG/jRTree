@@ -31,7 +31,6 @@ public class LinearSplitter extends DistanceBasedSplitter {
         NodeEntry ne1 = new NodeEntry(farthest.get(0).getMBR(), node1.getNodeId());
         NodeEntry ne2 = new NodeEntry(farthest.get(1).getMBR(), node2.getNodeId());
 
-
         // Control variables
         int remainEntries = allNodeEntries.size();
         int remainSpaceNode1 = M - 1;

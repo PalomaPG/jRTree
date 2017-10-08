@@ -73,10 +73,8 @@ public class Node extends AbstractNode implements Serializable{
     }
 
     public boolean delete(MBR mbr){
-
         return false;
     }
-
 
     public boolean isLeaf() {
         return this.isLeaf;
@@ -89,7 +87,6 @@ public class Node extends AbstractNode implements Serializable{
     public ArrayList<NodeEntry> getData() {
         return data;
     }
-
 
     public void deleteFile(long id){
         try{
