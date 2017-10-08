@@ -53,6 +53,7 @@ public class SynthGen extends AbstractGen {
 			try {
 
 				this.fw.write(String.format("%d,%d,%d,%d\n", d[0], d[1], d[2], d[3]));
+				if(i%1000==0) this.fw.flush();
 				}
 			catch (IOException e) {
 				// TODO Auto-generated catch block

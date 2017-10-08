@@ -6,10 +6,7 @@ import exception.RTreeException;
 import structure.*;
 import utils.Constants;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 
 public class Main {
 
@@ -17,7 +14,8 @@ public class Main {
     public static void main(String [] args) throws RTreeDiskAccessException, RTreeException {
 
 
-        readData();
+        //readData();
+        testTasks();
         System.out.println("Done!!");
 
     }
@@ -62,5 +60,16 @@ public class Main {
 
     }
 
+    public static void testTasks(){
+
+        try {
+            Tasks tasks = new Tasks("./synthdata-N33554432.csv",new FileWriter("./output/out-test.csv"),
+                    "./synthdata-N8.csv", new FileWriter("./output/search-test.csv"), new LinearSplitter(),2000);
+            tasks.insertTask();
+            tasks.searchTask();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
 }
