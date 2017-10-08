@@ -22,6 +22,7 @@ public class RTree implements Serializable{
         this.nodeSplitter = nodeSplitter;
         this.root = new Node(nodeSize);
         rootPtr = this.root.getNodeId();
+        this.root.writeToDisk();
     }
 
     public long getRootPtr(){ return rootPtr;}
@@ -83,6 +84,7 @@ public class RTree implements Serializable{
                 }
             } else { /* MBR was inserted. Should return an ArrayList with a NodeEntry with updated MBR. In overflow case
              (above), the Splitter should be responsible of calculating new MBRs.*/
+                node.writeToDisk();
                 newEntries = new ArrayList<NodeEntry>(1);
                 if (reCalcMBR){
                     newEntries.add(newUpdatedNodeEntry(node));
@@ -129,12 +131,18 @@ public class RTree implements Serializable{
                     child0.writeToDisk();
                     if (node.equals(this.root)){
                         /* Se debe crear nueva raiz e insertar las nuevas entradas antes de retornar */
+                        node.deleteFile(node.getNodeId());
                         newRoot(possibleNewEntries);
+                        this.root.writeToDisk();
+                    } else {
+                        // El nodo hizo overflow y ya no debe existir. Es reemplazado por child0 y child1
+                        node.deleteFile(node.getNodeId());
                     }
                     return possibleNewEntries;
                 }
             } catch (IndexOutOfBoundsException exception){
-
+                // Hay q actualizar el nodo en memoria secundaria
+                node.writeToDisk();
             } finally {
                 /* Updating above MBR. */
                 newEntries.clear();

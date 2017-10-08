@@ -12,8 +12,6 @@ public class Main {
 
     static RTree tree;
     public static void main(String [] args) throws RTreeDiskAccessException, RTreeException {
-
-
         //readData();
         testTasks();
         System.out.println("Done!!");

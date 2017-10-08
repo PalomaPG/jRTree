@@ -94,52 +94,46 @@ public class Node extends AbstractNode implements Serializable{
     public void deleteFile(long id){
         try{
             File file = new File(Constants.TREE_DATA_DIRECTORY+"r"+id+".node");
-
-            if(file.delete())
+            if(file.delete()){
                 System.out.println(file.getName() + " is deleted!");
-            else
+            } else {
                 System.out.println("Delete operation is failed.");
-
-        }catch(Exception e){
+            }
+        } catch(Exception e){
             e.printStackTrace();
         }
     }
 
     public void writeToDisk() {
-
         File theDir = new File(Constants.TREE_DATA_DIRECTORY);
-
-// if the directory does not exist, create it
+        // if the directory does not exist, create it
         if (!theDir.exists()) {
             System.out.println("creating directory: " + theDir.getName());
             boolean result = false;
-
             try{
                 theDir.mkdir();
                 result = true;
-            }
-            catch(SecurityException se){
+            } catch(SecurityException se){
                 //handle it
                 se.printStackTrace();
             }
             if(result) {
                 System.out.println("DIR created");
             }
-        }
-        else
+        } else{
             System.err.println("Ya existe dir");
-
-
+        }
 
         System.err.println("Intentando escribir");
         try {
             File nodeFile = new File(Constants.TREE_DATA_DIRECTORY+"r" + nodeID + ".node");
             System.err.println(String.format("ID node: %d", nodeID));
             nodeFile.createNewFile();
-            ObjectOutputStream out
-                    = new ObjectOutputStream(new FileOutputStream(nodeFile));
+            FileOutputStream fileOutputStream = new FileOutputStream(nodeFile);
+            ObjectOutputStream out = new ObjectOutputStream(fileOutputStream);
             out.writeObject(this);
             System.err.println("Escribiendo");
+            fileOutputStream.close();
             out.close();
             System.err.println(Constants.TREE_DATA_DIRECTORY+"r" + nodeID + ".node");
         } catch (Exception e) {
@@ -151,10 +145,13 @@ public class Node extends AbstractNode implements Serializable{
     /** Read from disk and return the node with the specified id. */
     public static Node readFromDisk(long id) {
         try {
-            ObjectInputStream in
-                    = new ObjectInputStream
-                    (new FileInputStream(Constants.TREE_DATA_DIRECTORY+"r" +id + ".node"));
-            return (Node)(in.readObject());
+            FileInputStream fileInputStream =
+                    new FileInputStream(Constants.TREE_DATA_DIRECTORY+"r" +id + ".node");
+            ObjectInputStream in = new ObjectInputStream (fileInputStream);
+            Node read = (Node)in.readObject();
+            fileInputStream.close();
+            in.close();
+            return read;
         } catch (Exception e) {
             e.printStackTrace();
             System.exit(1);

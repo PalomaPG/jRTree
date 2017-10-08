@@ -36,7 +36,7 @@ public class LinearSplitter extends DistanceBasedSplitter {
         int remainEntries = allNodeEntries.size();
         int remainSpaceNode1 = M - 1;
         int remainSpaceNode2 = M - 1;
-        final int minimumAllocated = (int) Math.floor(Constants.MINIMUM_ALLOCATION);
+        final int minimumAllocated = (int) Math.floor(M*0.4);
         NodeEntry toBeInserted;
         while (!allNodeEntries.isEmpty()){
             // remainEntries = L and one of the nodes has cur size m-L, insert all remains in that node.
