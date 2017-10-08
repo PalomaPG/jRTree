@@ -61,10 +61,12 @@ public class Main {
     public static void testTasks(){
 
         try {
-            Tasks tasks = new Tasks("./synthdata-N33554432.csv",new FileWriter("./output/out-test.csv"),
-                    "./synthdata-N8.csv", new FileWriter("./output/search-test.csv"), new LinearSplitter(),2000);
+            Tasks tasks = new Tasks("./synthdata-N1024.csv",new FileWriter("./output/out-test.csv"),
+                    "./synthdata-N512.csv", new FileWriter("./output/search-test.csv"), new LinearSplitter(),2000);
             tasks.insertTask();
+            System.err.println("Insert task: DONE\n");
             tasks.searchTask();
+            System.err.println("Search task: DONE\n");
         } catch (IOException e) {
             e.printStackTrace();
         }

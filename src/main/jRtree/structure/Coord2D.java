@@ -57,4 +57,8 @@ public class Coord2D implements Serializable{
         return Math.sqrt(Math.pow(this.x - c.getX(), 2) + Math.pow(this.y - c.getY(), 2));
     }
 
+    @Override
+    public String toString() {
+        return new StringBuilder().append("(").append(x).append(",").append(y).append(")").toString();
+    }
 }

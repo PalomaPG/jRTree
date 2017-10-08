@@ -12,7 +12,7 @@ public class Main {
 		public static void synthgenRoutine() {
 		    String path = ".";
 			System.err.println("INIT - Synthetic data generation");
-			SynthGen sg = new SynthGen(25, path);
+			SynthGen sg = new SynthGen(10, path);
 			sg.writeFile();
 			System.err.println("END - Synthetic data generation");
 		}

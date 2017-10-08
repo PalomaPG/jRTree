@@ -110,7 +110,7 @@ public class RTree implements Serializable{
         }
         NodeEntry minEnlargement = getMinEnlargement(candidates);
         /* Recursive call 'ö' */
-        Node child = (Node)Node.readFromDisk(minEnlargement.getChild());
+        Node child = Node.readFromDisk(minEnlargement.getChild());
         ArrayList<NodeEntry> newEntries = realInsert(ne, child, !(minAreaGrowth == 0) );
         if (!(newEntries.isEmpty())){
             /* Si entra aquí debe actualizarse este nodo con las nuevas entradas que vienen de abajo.
@@ -119,9 +119,15 @@ public class RTree implements Serializable{
             Al menos una de las nuevas entradas debe reemplazar al NodeEntry apuntado por minEnlargement, el otro
             (si es que existe) debe insertarse y chequear si hay overflow */
             node.replace(minEnlargement, newEntries.get(0));
+            System.err.println("--------------------------");
+            System.err.println(newEntries.get(0).getChild());
+            System.err.println(newEntries.get(0).getContainer().getNodeId());
+            System.err.println(newEntries.size());
+            System.err.println("--------------------------");
             ArrayList<NodeEntry> possibleNewEntries;
             try {
                 boolean inserted = node.insert(newEntries.get(1));
+                System.err.println(newEntries.get(1).getChild());
                 if (!inserted){ /* Overflow */
                     possibleNewEntries = nodeSplitter.split(newEntries.get(1), node);
                     Node child0 = Node.readFromDisk(possibleNewEntries.get(0).getChild());

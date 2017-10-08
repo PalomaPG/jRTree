@@ -30,6 +30,7 @@ public class Node extends AbstractNode implements Serializable{
 
     public boolean insert(NodeEntry ne){
         if (curSize < capacity) {
+            ne.setContainer(this);
             data.add(ne);
             curSize++;
             return true;
@@ -46,7 +47,10 @@ public class Node extends AbstractNode implements Serializable{
         if (this.isLeaf){
             for (NodeEntry ne : this.data){
                 MBR tested = ne.getMBR();
+                System.err.println(tested.toString());
+                System.err.println(mbr.toString());
                 if (tested.intersect(mbr)){
+                    System.err.println("Haaaaaaaaaaaaaaaaaaaa");
                     matched.add(tested);
                 }
             }
@@ -54,9 +58,18 @@ public class Node extends AbstractNode implements Serializable{
             for (NodeEntry ne : this.data){
                 MBR tested = ne.getMBR();
                 if (tested.intersect(mbr)){
-                    Node child = (Node)readFromDisk(ne.getChild());
+                    Node child =readFromDisk(ne.getChild());
+                    if(child==null) System.err.println(String.format("Searching for child #%d", ne.getChild()));
+                    else System.err.println("Not null");
                     this.writeToDisk();
-                    matched.addAll(child.search(mbr));
+                    System.err.println((child.getData().get(0) instanceof NodeEntry));
+                    ArrayList<MBR> mbrs = child.search(mbr);
+                    System.err.println("Es una hoja?" + child.isLeaf());
+                   try {
+                       matched.addAll(mbrs);
+                   }catch (NullPointerException e){
+                       System.err.println("hola\n");
+                   }
                 }
             }
         }
@@ -68,6 +81,7 @@ public class Node extends AbstractNode implements Serializable{
     public void replace(NodeEntry oldEntry, NodeEntry newEntry){
         int toBeReplaced = data.indexOf(oldEntry);
         if (toBeReplaced >= 0){
+            newEntry.setContainer(this);
             data.set(toBeReplaced, newEntry);
         }
     }

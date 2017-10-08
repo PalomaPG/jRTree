@@ -92,4 +92,14 @@ public class MBR implements Serializable{
     public double width() {return this.topRight.getX() - this.leftBottom.getX();}
 
     public double area(){ return height()*width();}
+
+    public String toString(){
+        StringBuilder sb = new StringBuilder();
+        sb.append("[");
+        sb.append(this.leftBottom.toString());
+        sb.append(",");
+        sb.append(this.topRight.toString());
+        sb.append("]");
+        return sb.toString();
+    }
 }

@@ -8,6 +8,7 @@ public class NodeEntry extends IDSettings implements Serializable {
 
     private MBR mbr;
     private long child_id;
+    private Node container;
 
     public NodeEntry(){
         this(null,-1);
@@ -16,8 +17,14 @@ public class NodeEntry extends IDSettings implements Serializable {
     public NodeEntry(MBR mbr, long n){
         this.mbr = mbr;
         this.child_id = n;
+        this.container=null;
     }
 
+    public NodeEntry(MBR mbr, long n, Node container){
+        this.mbr = mbr;
+        this.child_id = n;
+        this.container=container;
+    }
 
     public MBR getMBR() {
         return mbr;
@@ -80,4 +87,11 @@ public class NodeEntry extends IDSettings implements Serializable {
         else return false;
     }
 
+    public void setContainer(Node container) {
+        this.container = container;
+    }
+
+    public Node getContainer() {
+        return container;
+    }
 }
