@@ -45,7 +45,7 @@ public class DiskAccessTest {
     /*Debe crear el arbol y generar RAF*/
     @Test
     public void createTreeLinear() throws RTreeDiskAccessException, RTreeException {
-        rtree = new RTree(2, new LinearSplitter());
+        rtree = new RTree(3, new LinearSplitter());
         long rootIdx = rtree.getRootPtr();
         rtree.insert(R1);
         Assert.assertEquals(rootIdx, rtree.getRootPtr());
@@ -53,7 +53,7 @@ public class DiskAccessTest {
         Assert.assertEquals(rootIdx, rtree.getRootPtr());
         Assert.assertEquals(rtree.getRoot().getCurSize(), 2);
         rtree.insert(R3);
-        Assert.assertFalse(rootIdx== rtree.getRootPtr());
+        Assert.assertFalse(rootIdx!= rtree.getRootPtr());
         rootIdx = rtree.getRootPtr();
         rtree.insert(R4);
         rtree.insert(R5);

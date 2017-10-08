@@ -7,6 +7,7 @@ public class GreeneSplit extends DistanceBasedSplitter {
 
     public ArrayList<NodeEntry> split(NodeEntry ne, Node node) {
         ArrayList<NodeEntry> allNodeEntries = new ArrayList<NodeEntry>(node.getData());
+        node.deleteFile(node.getNodeId());
         allNodeEntries.add(ne);
         chooseFarthestMBRs(allNodeEntries); // This set the variable axisOfLongestSeparation
         orderByAxis(allNodeEntries);

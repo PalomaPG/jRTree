@@ -11,6 +11,7 @@ public class LinearSplitter extends DistanceBasedSplitter {
     public ArrayList<NodeEntry> split(NodeEntry ne, Node node){
         // Create set of all node entries
         ArrayList<NodeEntry> allNodeEntries = new ArrayList<NodeEntry>(node.getData());
+        node.deleteFile(node.getNodeId());
         allNodeEntries.add(ne);
         // Pick the pair at most distance between them
         ArrayList<NodeEntry> farthest = chooseFarthestMBRs(allNodeEntries);
