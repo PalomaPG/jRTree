@@ -59,8 +59,8 @@ public class NodeTest {
         Node n = new Node(1, null);
         n.insert(new NodeEntry(mbr1, -1));  // insert should accept structure.NodeEntry and structure.MBR objects
         // act
-        ArrayList<MBR> mbrArray1 = n.search(mbr1);  // Searching is always about data in a structure.NodeEntry
-        ArrayList<MBR> mbrArray2 = n.search(mbr2);
+        ArrayList<MBR> mbrArray1 = n.search(mbr1, ".");  // Searching is always about data in a structure.NodeEntry
+        ArrayList<MBR> mbrArray2 = n.search(mbr2, ".");
         // assert
         assertTrue(mbrArray1.contains(mbr1));
         assertNull(mbrArray2);

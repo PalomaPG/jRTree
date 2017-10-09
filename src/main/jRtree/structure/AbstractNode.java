@@ -7,7 +7,7 @@ import utils.Utils;
 import java.io.*;
 import java.util.ArrayList;
 
-public abstract class AbstractNode extends IDSettings implements INode, Serializable{
+public abstract class AbstractNode implements INode, Serializable{
 
 
     protected ArrayList<NodeEntry> data;

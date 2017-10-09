@@ -14,14 +14,16 @@ public class RTree implements Serializable{
     private NodeSplitter nodeSplitter;
     private Node root;
     private long rootPtr;
+    private String nodes_path;
 
 
-    public RTree(int nodeSize, NodeSplitter nodeSplitter) throws RTreeException, RTreeDiskAccessException {
+    public RTree(int nodeSize, NodeSplitter nodeSplitter, String nodes_path) throws RTreeException, RTreeDiskAccessException {
         this.nodeSize = nodeSize;
         this.nodeSplitter = nodeSplitter;
         this.root = new Node(nodeSize, null);
         rootPtr = this.root.getNodeId();
-        this.root.writeToDisk();
+        this.root.writeToDisk(nodes_path);
+        this.nodes_path = nodes_path;
     }
 
     public long getRootPtr(){ return rootPtr;}
@@ -75,7 +77,8 @@ public class RTree implements Serializable{
             boolean inserted = node.insert(ne);  // O(1)
             ArrayList<NodeEntry> newEntries;
             if (!inserted){
-                newEntries = nodeSplitter.split(ne, node);  // Size 2
+                newEntries = nodeSplitter.split(ne, node, nodes_path);  // Size 2
+                if(newEntries==null) System.err.println("NULLLLLLLLLLLLLLLLLL");
                 if (this.root.isLeaf()){
                     /* Just happens once. When the root overflows must create a new root, but since was a leaf
                      * realInsert returns at insert method. That's why the new root should be created here */
@@ -83,7 +86,7 @@ public class RTree implements Serializable{
                 }
             } else { /* MBR was inserted. Should return an ArrayList with a NodeEntry with updated MBR. In overflow case
              (above), the Splitter should be responsible of calculating new MBRs.*/
-                node.writeToDisk();
+                node.writeToDisk(nodes_path);
                 newEntries = new ArrayList<NodeEntry>(1);
                 if (reCalcMBR){
                     newEntries.add(newUpdatedNodeEntry(node));
@@ -109,7 +112,7 @@ public class RTree implements Serializable{
         }
         NodeEntry minEnlargement = getMinEnlargement(candidates);
         /* Recursive call 'ö' */
-        Node child = Node.readFromDisk(minEnlargement.getChild());
+        Node child = Node.readFromDisk(minEnlargement.getChild(), nodes_path);
         ArrayList<NodeEntry> newEntries = realInsert(ne, child, !(minAreaGrowth == 0) );
         if (!(newEntries.isEmpty())){
             /* Si entra aquí debe actualizarse este nodo con las nuevas entradas que vienen de abajo.
@@ -123,28 +126,28 @@ public class RTree implements Serializable{
                 boolean inserted = node.insert(newEntries.get(1));
                 System.err.println(newEntries.get(1).getChild());
                 if (!inserted){ /* Overflow */
-                    possibleNewEntries = nodeSplitter.split(newEntries.get(1), node);
+                    possibleNewEntries = nodeSplitter.split(newEntries.get(1), node, nodes_path);
                     Node parent_container = node.removeParent();
 
-                    Node child0 = Node.readFromDisk(possibleNewEntries.get(0).getChild());
-                    Node child1 = Node.readFromDisk(possibleNewEntries.get(1).getChild());
+                    Node child0 = Node.readFromDisk(possibleNewEntries.get(0).getChild(), nodes_path);
+                    Node child1 = Node.readFromDisk(possibleNewEntries.get(1).getChild(), nodes_path);
                     child0.setIsLeaf(false);
                     child1.setIsLeaf(false);
                     parent_container.insert(possibleNewEntries.get(0));
                     if(!parent_container.insert(possibleNewEntries.get(1))) throw new Exception("Otro split imprevisto...");
-                    child1.writeToDisk();
-                    child0.writeToDisk();
+                    child1.writeToDisk(nodes_path);
+                    child0.writeToDisk(nodes_path);
                     if (node.equals(this.root)){
                         /* Se debe crear nueva raiz e insertar las nuevas entradas antes de retornar */
                         newRoot(possibleNewEntries);
                     }
                     return possibleNewEntries;
                 } else {
-                    node.writeToDisk();
+                    node.writeToDisk(nodes_path);
                 }
             } catch (IndexOutOfBoundsException exception){
                 // Hay q actualizar el nodo en memoria secundaria
-                node.writeToDisk();
+                node.writeToDisk(nodes_path);
             } finally {
                 /* Updating above MBR. */
                 newEntries.clear();
@@ -165,7 +168,7 @@ public class RTree implements Serializable{
 
 
     public ArrayList<MBR> search(MBR mbr){
-        return this.root.search(mbr);
+        return this.root.search(mbr, this.nodes_path);
     }
 
     private void newRoot(ArrayList<NodeEntry> newEntries){
@@ -176,7 +179,7 @@ public class RTree implements Serializable{
         for (NodeEntry nodeEntry : newEntries){  /* Optional: Create a insertAll method at Node class */
             this.root.insert(nodeEntry);
         }
-        this.root.writeToDisk();
+        this.root.writeToDisk(this.nodes_path);
     }
 
     private NodeEntry newUpdatedNodeEntry(Node childNode){

@@ -44,7 +44,7 @@ public class Node extends AbstractNode implements Serializable{
      * If the node is a leaf should return a list of structure.MBR which intersects the genrect.
      * Else should ask to its children when a structure.MBR in a structure.NodeEntry intersects.
      */
-    public ArrayList<MBR> search(MBR mbr){
+    public ArrayList<MBR> search(MBR mbr, String path){
         ArrayList<MBR> matched = new ArrayList<MBR>();
         if (this.isLeaf){
             for (NodeEntry ne : this.data){
@@ -59,10 +59,10 @@ public class Node extends AbstractNode implements Serializable{
             for (NodeEntry ne : this.data){
                 MBR tested = ne.getMBR();
                 if (tested.intersect(mbr)){
-                    Node child =readFromDisk(ne.getChild());
+                    Node child =readFromDisk(ne.getChild(), path);
                     if(child==null) System.err.println(String.format("Searching for child #%d", ne.getChild()));
-                    this.writeToDisk();
-                    ArrayList<MBR> mbrs = child.search(mbr);
+                    this.writeToDisk(path);
+                    ArrayList<MBR> mbrs = child.search(mbr, path);
                    try {
                        matched.addAll(mbrs);
                    }catch (NullPointerException e){
@@ -100,9 +100,9 @@ public class Node extends AbstractNode implements Serializable{
         return data;
     }
 
-    public void deleteFile(long id){
+    public void deleteFile(long id, String path){
         try{
-            File file = new File(Constants.TREE_DATA_DIRECTORY+"r"+id+".node");
+            File file = new File(path+"/r"+id+".node");
             if(file.delete()){
                 System.out.println(file.getName() + " is deleted!");
             } else {
@@ -113,32 +113,16 @@ public class Node extends AbstractNode implements Serializable{
         }
     }
 
-    public void writeToDisk() {
-        File theDir = new File(Constants.TREE_DATA_DIRECTORY);
-        // if the directory does not exist, create it
-        if (!theDir.exists()) {
-            boolean result = false;
-            try{
-                theDir.mkdir();
-                result = true;
-            } catch(SecurityException se){
-                //handle it
-                se.printStackTrace();
-            }
-            if(result) {
-            }
-        } else{
-        }
+    public void writeToDisk(String path) {
 
         try {
-            File nodeFile = new File(Constants.TREE_DATA_DIRECTORY+"r" + nodeID + ".node");
+            File nodeFile = new File(path+"/r" + nodeID + ".node");
             nodeFile.createNewFile();
             FileOutputStream fileOutputStream = new FileOutputStream(nodeFile);
             ObjectOutputStream out = new ObjectOutputStream(fileOutputStream);
             out.writeObject(this);
             fileOutputStream.close();
             out.close();
-            System.err.println(Constants.TREE_DATA_DIRECTORY+"r" + nodeID + ".node");
         } catch (Exception e) {
             e.printStackTrace();
             System.exit(1);
@@ -146,11 +130,11 @@ public class Node extends AbstractNode implements Serializable{
     }
 
     /** Read from disk and return the node with the specified id. */
-    public static Node readFromDisk(long id) {
+    public static Node readFromDisk(long id, String path) {
         try {
             FileInputStream fileInputStream =
-                    new FileInputStream(Constants.TREE_DATA_DIRECTORY+"r" +id + ".node");
-
+                    new FileInputStream(path+"/r" +id + ".node");
+            System.err.println("Reading from: "+path+"/r" +id + ".node");
             ObjectInputStream in = new ObjectInputStream (fileInputStream);
             Node read = (Node)in.readObject();
             fileInputStream.close();

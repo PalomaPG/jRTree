@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.Comparator;
 
 
-public class NodeEntry extends IDSettings implements Serializable {
+public class NodeEntry implements Serializable {
 
     private MBR mbr;
     private long child_id;

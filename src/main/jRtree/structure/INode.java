@@ -9,7 +9,7 @@ public interface INode {
 
     boolean insert(NodeEntry ne);
 
-    ArrayList<MBR> search(MBR mbr);
+    ArrayList<MBR> search(MBR mbr, String path);
 
     boolean delete(MBR mbr);
 

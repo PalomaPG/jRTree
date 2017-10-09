@@ -7,21 +7,24 @@ import structure.MBR;
 import structure.NodeSplitter;
 import structure.RTree;
 import utils.Constants;
+import org.apache.commons.io.FileUtils;
 
 import java.io.*;
 
 public class Tasks {
 
-    protected String insertInPath,  searchInPath;
+    protected String insertInPath,  searchInPath, insertPython, outpath;
     protected FileWriter insertOutPath, searchOutPath;
     protected RTree tree;
     protected int experimentBuffer;
     protected long[] insertionTime;
     protected long[] searchingTime;
 
+
     public Tasks(String insertInPath, FileWriter insertOutPath,
                  String searchInPath, FileWriter searchOutPath,
-                 NodeSplitter splitter, int experimentBuffer){
+                 NodeSplitter splitter, int experimentBuffer,
+                 String written_nodes){
 
         this.insertInPath = insertInPath;
         this.insertOutPath = insertOutPath;
@@ -30,14 +33,19 @@ public class Tasks {
         insertionTime = new long[experimentBuffer];
         searchingTime = new long[experimentBuffer];
         this.experimentBuffer = experimentBuffer;
+
+
         try {
-            this.tree = new RTree(Constants.CAPACITY, splitter);
+            FileUtils.cleanDirectory(new File(written_nodes));
+            this.tree = new RTree(Constants.CAPACITY, splitter, written_nodes);
+
         } catch (RTreeException e) {
             e.printStackTrace();
         } catch (RTreeDiskAccessException e) {
             e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-
     }
 
     public void insertTask(){
@@ -52,10 +60,10 @@ public class Tasks {
             while((line=br.readLine())!=null) {
 
                 String[] coords = line.split(",");
-                int minX = Integer.parseInt(coords[0]);
-                int minY = Integer.parseInt(coords[1]);
-                int maxX = Integer.parseInt(coords[2]);
-                int maxY = Integer.parseInt(coords[3]);
+                double minX = Double.parseDouble(coords[0]);
+                double minY = Double.parseDouble(coords[1]);
+                double maxX = Double.parseDouble(coords[2]);
+                double maxY = Double.parseDouble(coords[3]);
 
                 MBR mbr = new MBR(new Coord2D(minX, minY), new Coord2D(maxX, maxY));
                 long t0 = System.nanoTime();
@@ -73,6 +81,19 @@ public class Tasks {
             fr.close();
             saveStats(insertionTime, insertOutPath, i%experimentBuffer);
             insertOutPath.close();
+            /*
+            Process p = Runtime.getRuntime().exec("python3 "+insertPython+" "+"/home/paloma/out.txt");
+            System.err.println("HOASAJSDJASDSDKA");
+            try {
+                p.waitFor();
+                System.err.println(p.exitValue());
+                System.err.println("QUE ONDAAAA");
+
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }*/
+
+
 
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -94,10 +115,10 @@ public class Tasks {
             while((line=br.readLine())!=null) {
 
                 String[] coords = line.split(",");
-                int minX = Integer.parseInt(coords[0]);
-                int minY = Integer.parseInt(coords[1]);
-                int maxX = Integer.parseInt(coords[2]);
-                int maxY = Integer.parseInt(coords[3]);
+                double minX = Double.parseDouble(coords[0]);
+                double minY = Double.parseDouble(coords[1]);
+                double maxX = Double.parseDouble(coords[2]);
+                double maxY = Double.parseDouble(coords[3]);
 
                 MBR mbr = new MBR(new Coord2D(minX, minY), new Coord2D(maxX, maxY));
                 long t0 = System.nanoTime();
@@ -128,7 +149,7 @@ public class Tasks {
         StringBuilder s = new StringBuilder();
         for (int i=0; i<buffer; i++){
             s.append(data[i]);
-            s.append(',');
+            s.append('\n');
         }
         try {
             outputFile.write(s.toString());

@@ -24,7 +24,7 @@ public class RTreeTest {
         int nodeSize = 3;
         this.nodeSplitter = new LinearSplitter();
         try {
-            this.rt = new RTree(nodeSize, this.nodeSplitter);
+            this.rt = new RTree(nodeSize, this.nodeSplitter, "output/");
         } catch (RTreeException e) {
             e.printStackTrace();
         } catch (RTreeDiskAccessException e) {

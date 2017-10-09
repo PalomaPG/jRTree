@@ -10,15 +10,14 @@ public class LinearSplitter extends DistanceBasedSplitter {
      * Should return two NodeEntries whose child members are references to the new nodes created from splitting
      * the input.
      */
-    public ArrayList<NodeEntry> split(NodeEntry ne, Node node){
+    public ArrayList<NodeEntry> split(NodeEntry ne, Node node, String written_nodes){
         // Create set of all node entries
+        System.err.println("RSFDFSFSFDS");
         ArrayList<NodeEntry> allNodeEntries = new ArrayList<NodeEntry>(node.getData());
-        node.deleteFile(node.getNodeId());
-
-        if(node.getNodeId()==24){
-            System.err.println(node.getParent());
-        }
+        node.deleteFile(node.getNodeId(), written_nodes);
+        System.err.println(ne.getClass());
         allNodeEntries.add(ne);
+        System.err.println(allNodeEntries.size());
         // Pick the pair at most distance between them
         ArrayList<NodeEntry> farthest = chooseFarthestMBRs(allNodeEntries);
         // Remove them from the set
@@ -87,8 +86,8 @@ public class LinearSplitter extends DistanceBasedSplitter {
             remainEntries--;
         }
         //Write nodes to disk
-        node1.writeToDisk();
-        node2.writeToDisk();
+        node1.writeToDisk(written_nodes);
+        node2.writeToDisk(written_nodes);
         ArrayList<NodeEntry> newEntries = new ArrayList<NodeEntry>(2);
         newEntries.add(ne1);
         newEntries.add(ne2);
