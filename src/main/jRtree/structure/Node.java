@@ -52,7 +52,6 @@ public class Node extends AbstractNode implements Serializable{
                 System.err.println(tested.toString());
                 System.err.println(mbr.toString());
                 if (tested.intersect(mbr)){
-                    System.err.println("Haaaaaaaaaaaaaaaaaaaa");
                     matched.add(tested);
                 }
             }
@@ -62,15 +61,11 @@ public class Node extends AbstractNode implements Serializable{
                 if (tested.intersect(mbr)){
                     Node child =readFromDisk(ne.getChild());
                     if(child==null) System.err.println(String.format("Searching for child #%d", ne.getChild()));
-                    else System.err.println("Not null");
                     this.writeToDisk();
-                    System.err.println((child.getData().get(0) instanceof NodeEntry));
                     ArrayList<MBR> mbrs = child.search(mbr);
-                    System.err.println("Es una hoja?" + child.isLeaf());
                    try {
                        matched.addAll(mbrs);
                    }catch (NullPointerException e){
-                       System.err.println("hola\n");
                    }
                 }
             }
@@ -81,23 +76,12 @@ public class Node extends AbstractNode implements Serializable{
     /* This does exactly that, replace an oldEntry by a new one.
      * Nothing happens if oldEntry is not in data */
     public void replace(NodeEntry oldEntry, NodeEntry newEntry){
-        System.out.println("----------------------------");
-        System.out.println(oldEntry.getContainer().getNodeId());
-        System.out.println(oldEntry.getContainer().curSize);
-        System.out.println(oldEntry.getContainer().capacity);
-
-
-        System.out.println(oldEntry.getChild());
-        System.out.println(newEntry.getChild());
-        System.out.println("----------------------------");
 
         int toBeReplaced = data.indexOf(oldEntry);
         if (toBeReplaced >= 0){
             newEntry.setContainer(this);
             data.set(toBeReplaced, newEntry);
         }
-        else
-            System.err.println("OLOOOOOOOOOOOOOOOOOOOOOJSKDFJKRJ");
     }
 
     public boolean delete(MBR mbr){
@@ -133,7 +117,6 @@ public class Node extends AbstractNode implements Serializable{
         File theDir = new File(Constants.TREE_DATA_DIRECTORY);
         // if the directory does not exist, create it
         if (!theDir.exists()) {
-            System.out.println("creating directory: " + theDir.getName());
             boolean result = false;
             try{
                 theDir.mkdir();
@@ -143,21 +126,16 @@ public class Node extends AbstractNode implements Serializable{
                 se.printStackTrace();
             }
             if(result) {
-                System.out.println("DIR created");
             }
         } else{
-            System.err.println("Ya existe dir");
         }
 
-        System.err.println("Intentando escribir");
         try {
             File nodeFile = new File(Constants.TREE_DATA_DIRECTORY+"r" + nodeID + ".node");
-            System.err.println(String.format("ID node: %d", nodeID));
             nodeFile.createNewFile();
             FileOutputStream fileOutputStream = new FileOutputStream(nodeFile);
             ObjectOutputStream out = new ObjectOutputStream(fileOutputStream);
             out.writeObject(this);
-            System.err.println("Escribiendo");
             fileOutputStream.close();
             out.close();
             System.err.println(Constants.TREE_DATA_DIRECTORY+"r" + nodeID + ".node");
@@ -169,11 +147,9 @@ public class Node extends AbstractNode implements Serializable{
 
     /** Read from disk and return the node with the specified id. */
     public static Node readFromDisk(long id) {
-        System.err.println("Leyendooooo....");
         try {
             FileInputStream fileInputStream =
                     new FileInputStream(Constants.TREE_DATA_DIRECTORY+"r" +id + ".node");
-            System.err.println("Abriendo archivo");
 
             ObjectInputStream in = new ObjectInputStream (fileInputStream);
             Node read = (Node)in.readObject();

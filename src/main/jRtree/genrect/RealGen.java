@@ -8,8 +8,8 @@ public class RealGen extends AbstractGen {
 
 	}
 
-	public int[] coords(int[] rd) {
-		return new int[0];
+	public double[] coords(double[] rd) {
+		return new double[0];
 	}
 
 

@@ -26,9 +26,7 @@ public class LinearSplitter extends DistanceBasedSplitter {
         // Create new nodes and add their first entries
         int M = node.getCapacity();
         Node node1 = new Node(M,null);
-        System.err.println(String.format("node id in linearSplitter, node1 %d", node1.nodeID));
         Node node2 = new Node(M, null);
-        System.err.println(String.format("node id in linearSplitter, node2 %d", node2.nodeID));
         node1.insert(farthest.get(0));
         node2.insert(farthest.get(1));
         // Create containers for those nodes

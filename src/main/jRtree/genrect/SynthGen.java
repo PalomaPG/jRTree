@@ -10,11 +10,13 @@ public class SynthGen extends AbstractGen {
 	
 	final int COORD_MAX = 500000;
 	final int DIM_MAX = 100;
-
+	private int n;
 	
-	public SynthGen(int n, String pwd) {
+	public SynthGen(int n, String pwd, boolean search) {
+		this.n = n;
 		this.N = (int)Math.pow(2, n);
-		this.filename = String.format(pwd+"/synthdata-N%d.csv", N);
+		if(search) this.N = this.N/10;
+		this.filename = String.format(pwd+"/synthdata-N%d.csv", n);
 		try {
 			this.fw = new FileWriter(this.filename);
 		} catch (IOException e) {
@@ -22,21 +24,21 @@ public class SynthGen extends AbstractGen {
 		}
 	}
 	
-	public int[] genSingleRectangle() {
-		int [] rect_desc = new int[4];
+	public double[] genSingleRectangle() {
+		double [] rect_desc = new double[4];
 		Random rnd = new Random();
 		
-		rect_desc[0] = (int)(rnd.nextDouble() * COORD_MAX);
-		rect_desc[1] = (int)(rnd.nextDouble() * COORD_MAX);
-		rect_desc[2] = (int)(rnd.nextDouble() * (DIM_MAX-1))+1;//width
-		rect_desc[3] = (int)(rnd.nextDouble() * (DIM_MAX-1))+1;//length
+		rect_desc[0] = (rnd.nextDouble() * COORD_MAX);
+		rect_desc[1] = (rnd.nextDouble() * COORD_MAX);
+		rect_desc[2] = (rnd.nextDouble() * (DIM_MAX-1))+1;//width
+		rect_desc[3] = (rnd.nextDouble() * (DIM_MAX-1))+1;//length
 		
 		return rect_desc;
 	}
 	
 	
 	@Override
-	public int[] coords(int [] rd) {
+	public double[] coords(double [] rd) {
 		// TODO Auto-generated method stub
 		rd[2] = rd[0]+rd[2];
 		rd[3] = rd[1]+rd[3];
@@ -49,10 +51,10 @@ public class SynthGen extends AbstractGen {
 	public void writeFile() {
 		// TODO Auto-generated method stub
 		for(int i=0; i<N; i++) {
-			int [] d = coords(genSingleRectangle());
+			double [] d = coords(genSingleRectangle());
 			try {
 
-				this.fw.write(String.format("%d,%d,%d,%d\n", d[0], d[1], d[2], d[3]));
+				this.fw.write(String.format("%f,%f,%f,%f\n", d[0], d[1], d[2], d[3]));
 				if(i%1000==0) this.fw.flush();
 				}
 			catch (IOException e) {

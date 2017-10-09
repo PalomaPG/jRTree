@@ -44,13 +44,6 @@ public class DistanceBasedTest {
         Node left = Node.readFromDisk(neLeft.getChild());
         Node right = Node.readFromDisk(neRight.getChild());
 
-        // assert
-        //assertTrue(left.getData().containsAll(expectedNode1.getData()) ||
-        //        left.getData().containsAll(expectedNode2.getData()));
-        //assertTrue(right.getData().containsAll(expectedNode1.getData()) ||
-        //        right.getData().containsAll(expectedNode2.getData()));
-        //assertFalse(left.getData().containsAll(right.getData()));
-        // MBRs should be tested too
         assertEquals(new MBR(ne1.getMBR().getLeftBottom(), ne3.getMBR().getTopRight()), neLeft.getMBR());
         assertEquals(new MBR(ne4.getMBR().getLeftBottom(), ne2.getMBR().getTopRight()), neRight.getMBR());
     }

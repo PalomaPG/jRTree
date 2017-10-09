@@ -1,6 +1,5 @@
 package structure;
 
-//import diskmanagement.DiskAccess;
 
 import exception.RTreeDiskAccessException;
 import exception.RTreeException;
@@ -109,10 +108,8 @@ public class RTree implements Serializable{
             }
         }
         NodeEntry minEnlargement = getMinEnlargement(candidates);
-        System.err.println("Este nodo es el ..."+node.getNodeId());
         /* Recursive call 'ö' */
         Node child = Node.readFromDisk(minEnlargement.getChild());
-        System.err.println("Este nodo hijo  es el ..."+child.getNodeId());
         ArrayList<NodeEntry> newEntries = realInsert(ne, child, !(minAreaGrowth == 0) );
         if (!(newEntries.isEmpty())){
             /* Si entra aquí debe actualizarse este nodo con las nuevas entradas que vienen de abajo.
@@ -121,11 +118,6 @@ public class RTree implements Serializable{
             Al menos una de las nuevas entradas debe reemplazar al NodeEntry apuntado por minEnlargement, el otro
             (si es que existe) debe insertarse y chequear si hay overflow */
             node.replace(minEnlargement, newEntries.get(0));
-            System.err.println("--------------------------");
-            System.err.println(newEntries.get(0).getChild());
-            System.err.println(newEntries.get(0).getContainer().getNodeId());
-            System.err.println(newEntries.size());
-            System.err.println("--------------------------");
             ArrayList<NodeEntry> possibleNewEntries;
             try {
                 boolean inserted = node.insert(newEntries.get(1));
@@ -193,17 +185,4 @@ public class RTree implements Serializable{
     }
 
 
-    /** Write this BTree to disk. */
-    public void writeToDisk() {
-        try {
-            ObjectOutputStream out
-                    = new ObjectOutputStream
-                    (new FileOutputStream(Constants.TREE_DATA_DIRECTORY + "btree"));
-            out.writeObject(this);
-            out.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-            System.exit(1);
-        }
-    }
 }
