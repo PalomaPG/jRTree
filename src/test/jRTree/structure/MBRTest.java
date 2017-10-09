@@ -13,9 +13,9 @@ public class MBRTest {
 
     @Before
     public void MBRCreation(){
-        int[][] mbrCorners = {{-1,-1},{1,1}};  // Simple 2x2 rectangle in counterclockwise sense
-        int [] leftBottom = {-1,-1};
-        int [] topRight = {1,1};
+        double[][] mbrCorners = {{-1,-1},{1,1}};  // Simple 2x2 rectangle in counterclockwise sense
+        double [] leftBottom = {-1,-1};
+        double [] topRight = {1,1};
         mbr1 = new MBR(mbrCorners);  // structure.MBR using and array of points
         mbr2 = new MBR(leftBottom, topRight);  // structure.MBR(leftBottom, topRight) counterclockwise
         mbr3 = new MBR(new Coord2D(3,6), new Coord2D(5,20));

@@ -18,11 +18,11 @@ public class MBR implements Serializable{
     private Coord2D leftBottom;
     private Coord2D topRight;
 
-    public MBR(int[][] mbrCorners) {
+    public MBR(double[][] mbrCorners) {
         this(new Coord2D(mbrCorners[0]), new Coord2D(mbrCorners[1]));
     }
 
-    public MBR(int[] leftBottom, int[] topRight) {
+    public MBR(double[] leftBottom, double[] topRight) {
         this(new Coord2D(leftBottom), new Coord2D(topRight));
     }
 

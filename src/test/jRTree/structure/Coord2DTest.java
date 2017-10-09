@@ -12,14 +12,14 @@ public class Coord2DTest {
     @Test
     public void coordCreation(){
         // arrange
-        int x = 1;
-        int y = 0;
-        int[] pt = {1,0};
+        double x = 1;
+        double y = 0;
+        double[] pt = {1,0};
         // act
         Coord2D coord1 = new Coord2D(x,y);
         Coord2D coord2 = new Coord2D(pt);
         // assert
-        // Use assertEquals(expected, actual, delta) to compare floating-point numbers
+        // Use assertEquals(expected, actual, delta) to compare floating-podouble numbers
         assertEquals(coord1.getX(), x, delta);
         assertEquals(coord1.getY(), y, delta);
         assertEquals(coord2.getX(), coord1.getX(), delta);

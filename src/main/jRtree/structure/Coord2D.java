@@ -5,24 +5,24 @@ import java.io.Serializable;
 public class Coord2D implements Serializable{
     private static final long serialVersionUID = 1L;
 
-    private int x;
-    private int y;
+    private double x;
+    private double y;
 
-    public Coord2D(int x, int y){
+    public Coord2D(double x, double y){
         this.x = x;
         this.y = y;
     }
 
-    public Coord2D(int[] pt){
+    public Coord2D(double[] pt){
         this.x = pt[0];
         this.y = pt[1];
     }
 
-    public int getX() {
+    public double getX() {
         return this.x;
     }
 
-    public int getY() {
+    public double getY() {
         return this.y;
     }
 
