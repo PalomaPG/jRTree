@@ -27,12 +27,12 @@ public class DistanceBasedTest {
     @Test
     public void splitTest(){
         // arrange
-        Node node = new Node(3);
+        Node node = new Node(3, null);
         node.insert(ne1);
         node.insert(ne2);
         node.insert(ne3);
-        Node expectedNode1 = new Node(3);
-        Node expectedNode2 = new Node(3);
+        Node expectedNode1 = new Node(3, null);
+        Node expectedNode2 = new Node(3, null);
         expectedNode1.insert(ne1);
         expectedNode1.insert(ne3);
         expectedNode2.insert(ne2);

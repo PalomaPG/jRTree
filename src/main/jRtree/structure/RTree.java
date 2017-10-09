@@ -20,7 +20,7 @@ public class RTree implements Serializable{
     public RTree(int nodeSize, NodeSplitter nodeSplitter) throws RTreeException, RTreeDiskAccessException {
         this.nodeSize = nodeSize;
         this.nodeSplitter = nodeSplitter;
-        this.root = new Node(nodeSize);
+        this.root = new Node(nodeSize, null);
         rootPtr = this.root.getNodeId();
         this.root.writeToDisk();
     }
@@ -109,8 +109,10 @@ public class RTree implements Serializable{
             }
         }
         NodeEntry minEnlargement = getMinEnlargement(candidates);
+        System.err.println("Este nodo es el ..."+node.getNodeId());
         /* Recursive call 'ö' */
         Node child = Node.readFromDisk(minEnlargement.getChild());
+        System.err.println("Este nodo hijo  es el ..."+child.getNodeId());
         ArrayList<NodeEntry> newEntries = realInsert(ne, child, !(minAreaGrowth == 0) );
         if (!(newEntries.isEmpty())){
             /* Si entra aquí debe actualizarse este nodo con las nuevas entradas que vienen de abajo.
@@ -130,10 +132,14 @@ public class RTree implements Serializable{
                 System.err.println(newEntries.get(1).getChild());
                 if (!inserted){ /* Overflow */
                     possibleNewEntries = nodeSplitter.split(newEntries.get(1), node);
+                    Node parent_container = node.removeParent();
+
                     Node child0 = Node.readFromDisk(possibleNewEntries.get(0).getChild());
                     Node child1 = Node.readFromDisk(possibleNewEntries.get(1).getChild());
                     child0.setIsLeaf(false);
                     child1.setIsLeaf(false);
+                    parent_container.insert(possibleNewEntries.get(0));
+                    if(!parent_container.insert(possibleNewEntries.get(1))) throw new Exception("Otro split imprevisto...");
                     child1.writeToDisk();
                     child0.writeToDisk();
                     if (node.equals(this.root)){
@@ -172,7 +178,7 @@ public class RTree implements Serializable{
 
     private void newRoot(ArrayList<NodeEntry> newEntries){
         //this.root.deleteFile(rootPtr);
-        this.root = new Node(this.nodeSize);
+        this.root = new Node(this.nodeSize, null);
         this.rootPtr = this.root.getNodeId();
         this.root.setIsLeaf(false);  /* <-- very important */
         for (NodeEntry nodeEntry : newEntries){  /* Optional: Create a insertAll method at Node class */

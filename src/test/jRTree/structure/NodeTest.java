@@ -21,7 +21,7 @@ public class NodeTest {
         // arrange
         int capacity = 3;
         // act
-        Node n = new Node(capacity);
+        Node n = new Node(capacity, null);
         // assert
         assertEquals(capacity, n.getCapacity());
         assertEquals(0, n.getCurSize());
@@ -34,7 +34,7 @@ public class NodeTest {
     @Test
     public void nodeInsertTest(){
         // arrange
-        Node n = new Node(3);  // structure.Node with capacity of 3 node entries
+        Node n = new Node(3, null);  // structure.Node with capacity of 3 node entries
         NodeEntry ne1 = new NodeEntry();  // Empty constructor
         NodeEntry ne2 = new NodeEntry(null, -1);  // structure.NodeEntry(mbr, nodePtr or objectId)
         NodeEntry ne3 = new NodeEntry(null, -1);
@@ -56,7 +56,7 @@ public class NodeTest {
         MBR mbr1 = new MBR(new int[][] {{0,0},{0,0},{0,0},{0,0}});  /* Coordinates have no sense but aren't important
                                                                           for this test */
         MBR mbr2 = new MBR(new int[][] {{1,1},{0,1},{0,0},{1,0}});
-        Node n = new Node(1);
+        Node n = new Node(1, null);
         n.insert(new NodeEntry(mbr1, -1));  // insert should accept structure.NodeEntry and structure.MBR objects
         // act
         ArrayList<MBR> mbrArray1 = n.search(mbr1);  // Searching is always about data in a structure.NodeEntry
@@ -76,7 +76,7 @@ public class NodeTest {
         MBR mbr_1 = new MBR(new int[][] {{0,0},{0,0},{0,0},{0,0}});
         MBR mbr_2 = new MBR(new int[][] {{0,0},{0,0},{0,0},{0,0}});
         NodeEntry ne = new NodeEntry(mbr_1, -1);
-        INode n = new Node(3);
+        Node n = new Node(3, null);
         // act
         n.insert(ne);
         n.delete(mbr_2);  // Searches for node entry which stores the same data as the genrect
@@ -90,8 +90,8 @@ public class NodeTest {
     @Test
     public void equalsTest(){ /* equal without overriding */
         // arrange
-        Node n1 = new Node(1);
-        Node n2 = new Node(1);
+        Node n1 = new Node(1,null);
+        Node n2 = new Node(1, null);
         // act
         // assert
         assertEquals(n1, n1);

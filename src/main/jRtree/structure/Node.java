@@ -13,10 +13,12 @@ import java.util.ArrayList;
 public class Node extends AbstractNode implements Serializable{
 
     private static final long serialVersionUID = 6717676594323462987L;
+    private NodeEntry parent;
 
-    public Node(int capacity){
+    public Node(int capacity, NodeEntry parent){
         super();
         this.capacity = capacity;
+        this.parent = parent;
     }
 
     public int getCapacity() {
@@ -79,11 +81,23 @@ public class Node extends AbstractNode implements Serializable{
     /* This does exactly that, replace an oldEntry by a new one.
      * Nothing happens if oldEntry is not in data */
     public void replace(NodeEntry oldEntry, NodeEntry newEntry){
+        System.out.println("----------------------------");
+        System.out.println(oldEntry.getContainer().getNodeId());
+        System.out.println(oldEntry.getContainer().curSize);
+        System.out.println(oldEntry.getContainer().capacity);
+
+
+        System.out.println(oldEntry.getChild());
+        System.out.println(newEntry.getChild());
+        System.out.println("----------------------------");
+
         int toBeReplaced = data.indexOf(oldEntry);
         if (toBeReplaced >= 0){
             newEntry.setContainer(this);
             data.set(toBeReplaced, newEntry);
         }
+        else
+            System.err.println("OLOOOOOOOOOOOOOOOOOOOOOJSKDFJKRJ");
     }
 
     public boolean delete(MBR mbr){
@@ -155,9 +169,12 @@ public class Node extends AbstractNode implements Serializable{
 
     /** Read from disk and return the node with the specified id. */
     public static Node readFromDisk(long id) {
+        System.err.println("Leyendooooo....");
         try {
             FileInputStream fileInputStream =
                     new FileInputStream(Constants.TREE_DATA_DIRECTORY+"r" +id + ".node");
+            System.err.println("Abriendo archivo");
+
             ObjectInputStream in = new ObjectInputStream (fileInputStream);
             Node read = (Node)in.readObject();
             fileInputStream.close();
@@ -170,4 +187,21 @@ public class Node extends AbstractNode implements Serializable{
         }
     }
 
+    public NodeEntry getParent() {
+        return parent;
+    }
+
+    public void setParent(NodeEntry parent) {
+        this.parent = parent;
+    }
+
+    public Node removeParent() {
+
+        Node parent_container = parent.getContainer();
+        ArrayList<NodeEntry> ne_lst =parent_container.getData();
+        int idx= ne_lst.indexOf(parent);
+        ne_lst.remove(idx);
+        return parent_container;
+
+    }
 }

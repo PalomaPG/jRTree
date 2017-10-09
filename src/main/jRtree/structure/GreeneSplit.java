@@ -13,8 +13,8 @@ public class GreeneSplit extends DistanceBasedSplitter {
         orderByAxis(allNodeEntries);
         // Nodes to allocate entries
         int M = allNodeEntries.size() - 1;
-        Node node1 = new Node(M);
-        Node node2 = new Node(M);
+        Node node1 = new Node(M,null);
+        Node node2 = new Node(M, null);
         int mid = (M+1)/2;
         int i,j;
         for (i=0; i<mid; i++){
@@ -25,7 +25,9 @@ public class GreeneSplit extends DistanceBasedSplitter {
         }
         // Create Node Entries
         NodeEntry left = new NodeEntry(this.calculateMBR(node1.getData()), node1.getNodeId());
+        node1.setParent(left);
         NodeEntry right = new NodeEntry(this.calculateMBR(node2.getData()), node2.getNodeId());
+        node2.setParent(right);
         if ((M+1)%2 == 1){ // M+1 is odd
             NodeEntry lastEntry = allNodeEntries.get(M);
             double growth1 = left.calculateEnlargement(lastEntry);

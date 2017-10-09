@@ -31,7 +31,7 @@ public class DiskAccessTest {
     @Test
     public void createNode(){
         // arrange
-        Node node = new Node(3);
+        Node node = new Node(3, null);
         long id = node.getNodeId();
         NodeEntry nodeEntry = new NodeEntry(new MBR(new Coord2D(0,0), new Coord2D(1,1)), -1);
         node.insert(nodeEntry);
@@ -75,7 +75,7 @@ public class DiskAccessTest {
     public void createNode2(){
 
         /*Creates a node and checks either file was created*/
-        Node node = new Node(3);
+        Node node = new Node(3, null);
         long id = node.getNodeId();
         node.writeToDisk();
         Node n = (Node)Node.readFromDisk(node.getNodeId());

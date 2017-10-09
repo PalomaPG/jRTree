@@ -61,7 +61,7 @@ public class Main {
     public static void testTasks(){
 
         try {
-            Tasks tasks = new Tasks("./synthdata-N1024.csv",new FileWriter("./output/out-test.csv"),
+            Tasks tasks = new Tasks("./synthdata-N2048.csv",new FileWriter("./output/out-test.csv"),
                     "./synthdata-N512.csv", new FileWriter("./output/search-test.csv"), new LinearSplitter(),2000);
             tasks.insertTask();
             System.err.println("Insert task: DONE\n");

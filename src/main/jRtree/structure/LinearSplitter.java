@@ -14,6 +14,10 @@ public class LinearSplitter extends DistanceBasedSplitter {
         // Create set of all node entries
         ArrayList<NodeEntry> allNodeEntries = new ArrayList<NodeEntry>(node.getData());
         node.deleteFile(node.getNodeId());
+
+        if(node.getNodeId()==24){
+            System.err.println(node.getParent());
+        }
         allNodeEntries.add(ne);
         // Pick the pair at most distance between them
         ArrayList<NodeEntry> farthest = chooseFarthestMBRs(allNodeEntries);
@@ -21,16 +25,17 @@ public class LinearSplitter extends DistanceBasedSplitter {
         allNodeEntries.removeAll(farthest);
         // Create new nodes and add their first entries
         int M = node.getCapacity();
-        Node node1 = new Node(M);
+        Node node1 = new Node(M,null);
         System.err.println(String.format("node id in linearSplitter, node1 %d", node1.nodeID));
-        Node node2 = new Node(M);
+        Node node2 = new Node(M, null);
         System.err.println(String.format("node id in linearSplitter, node2 %d", node2.nodeID));
         node1.insert(farthest.get(0));
         node2.insert(farthest.get(1));
         // Create containers for those nodes
         NodeEntry ne1 = new NodeEntry(farthest.get(0).getMBR(), node1.getNodeId());
         NodeEntry ne2 = new NodeEntry(farthest.get(1).getMBR(), node2.getNodeId());
-
+        node1.setParent(ne1);
+        node2.setParent(ne2);
         // Control variables
         int remainEntries = allNodeEntries.size();
         int remainSpaceNode1 = M - 1;
@@ -85,9 +90,7 @@ public class LinearSplitter extends DistanceBasedSplitter {
         }
         //Write nodes to disk
         node1.writeToDisk();
-        System.err.println("Nodo 1 despues de..."+node1.nodeID);
         node2.writeToDisk();
-        System.err.println("Nodo 2 despues de..."+node2.nodeID);
         ArrayList<NodeEntry> newEntries = new ArrayList<NodeEntry>(2);
         newEntries.add(ne1);
         newEntries.add(ne2);
