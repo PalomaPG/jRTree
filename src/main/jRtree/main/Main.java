@@ -13,56 +13,56 @@ public class Main {
     static RTree tree;
     public static void main(String [] args) throws RTreeDiskAccessException, RTreeException {
         //readData();
-        testTasks();
+        execTasks(args[0], args[1]);
         System.out.println("Done!!");
 
     }
 
-    public static void readData() throws RTreeDiskAccessException, RTreeException {
 
-        tree = new RTree(2, new LinearSplitter());
-
-        try {
-            FileReader reader = new FileReader("./synthdata-N8.csv");
-            BufferedReader br = new BufferedReader(reader);
-            String line;
-            while((line=br.readLine())!=null) {
-
-                String[] coords = line.split(",");
-                int minX = Integer.parseInt(coords[0]);
-                int minY = Integer.parseInt(coords[1]);
-                int maxX = Integer.parseInt(coords[2]);
-                int maxY = Integer.parseInt(coords[3]);
-
-                MBR mbr = new MBR(new Coord2D(minX, minY), new Coord2D(maxX, maxY));
-                tree.insert(mbr);
-            }
-            br.close();
-            reader.close();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-    }
-
-    public static void execTasks(String path, NodeSplitter splitter){
+    public static void execTasks(String input_path, String output_path){
 
         String prefix = Constants.PREFIX;
 
         for(int i =9; i<=25; i++){
+            testTasksLinear(input_path, output_path, i);
+            testTasksGreene(input_path, output_path, i);
 
-            //Tasks tasks = new Tasks(path+"/"+prefix+i+Constants.SUFFIX, );
         }
 
     }
 
-    public static void testTasks(){
+    public static void testTasksLinear(String input_path, String output_path,int i){
 
         try {
-            Tasks tasks = new Tasks("./synthdata-N2048.csv",new FileWriter("./output/out-test.csv"),
-                    "./synthdata-N512.csv", new FileWriter("./output/search-test.csv"), new LinearSplitter(),2000);
+
+            String insert_path = input_path+Constants.synth_insert_dir+Constants.PREFIX+i+Constants.SUFFIX;
+            String search_path = input_path+Constants.synth_search_dir+Constants.PREFIX+i+Constants.SUFFIX;
+            String insert_out = output_path+Constants.OUTPUT_INSERT_LIN;
+            String search_out = output_path+Constants.OUTPUT_SEARCH_LIN;
+
+            Tasks tasks = new Tasks(insert_path,new FileWriter(insert_out),
+                    search_path, new FileWriter(search_out), new LinearSplitter(),2000);
+            tasks.insertTask();
+            System.err.println("Insert task: DONE\n");
+            tasks.searchTask();
+            System.err.println("Search task: DONE\n");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    public static void testTasksGreene(String input_path, String output_path,int i){
+
+        try {
+
+            String insert_path = input_path+Constants.synth_insert_dir+Constants.PREFIX+i+Constants.SUFFIX;
+            String search_path = input_path+Constants.synth_search_dir+Constants.PREFIX+i+Constants.SUFFIX;
+            String insert_out = output_path+Constants.OUTPUT_INSERT_GREENE;
+            String search_out = output_path+Constants.OUTPUT_SEARCH_GREENE;
+
+            Tasks tasks = new Tasks(insert_path,new FileWriter(insert_out),
+                    search_path, new FileWriter(search_out), new GreeneSplit(),2000);
             tasks.insertTask();
             System.err.println("Insert task: DONE\n");
             tasks.searchTask();
