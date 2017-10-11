@@ -9,9 +9,15 @@ public class Main {
         static String synth_search_dir = "/SYNTH-SEARCH/";
 
 		public static void main(String[] args) {
-		    allSynth(args[0]);
+		    String path ="/home/paloma/Documents/Algo/Tareas/SHP/tl_2016_09_tract.shp";
+		    realgenRoutine(path);
+		    //allSynth(args[0]);
         }
-		
+
+        public static void realgenRoutine(String path){
+		    RealGen rg = new RealGen(path);
+        }
+
 		public static void synthgenRoutine(String path, int i, boolean b) {
 		    ifDirDoesNotExist(path);
 			SynthGen sg = new SynthGen(i, path, b);
@@ -30,7 +36,6 @@ public class Main {
         }
 
         public static void ifDirDoesNotExist(String path){
-
 
             File theDir = new File(path);
 
